@@ -18,4 +18,8 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\RentFlex.Infrastructure\RentFlex.Infrastructure.csproj" />
+  </ItemGroup>
+
 </Project>
