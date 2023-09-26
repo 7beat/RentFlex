@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using RentFlex.Infrastructure.Data;
+using RentFlex.Infrastructure.Identity;
 
 namespace RentFlex.Infrastructure;
 public static class InfrastructureServicesRegistration
@@ -27,7 +28,7 @@ public static class InfrastructureServicesRegistration
 
     private static void ConfigureIdentity(this IServiceCollection services)
     {
-        services.AddIdentity<IdentityUser, IdentityRole>(o =>
+        services.AddDefaultIdentity<ApplicationUser>(o =>
         {
             o.User.RequireUniqueEmail = true;
         })
