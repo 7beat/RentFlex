@@ -2,7 +2,9 @@
 using RentFlex.Web.Models;
 using System.Diagnostics;
 
-namespace RentFlex.Web.Controllers;
+namespace RentFlex.Web.Areas.User.Controllers;
+
+[Area("User")]
 public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
