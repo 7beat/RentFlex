@@ -107,6 +107,9 @@ namespace RentFlex.Web.Areas.Identity.Pages.Account
             if (ModelState.IsValid)
             {
                 var user = CreateUser();
+                user.FirstName = "Test";
+                user.LastName = "Test";
+                user.Birthday = new(1999, 06, 08);
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
