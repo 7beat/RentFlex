@@ -4,7 +4,7 @@ using System.Diagnostics;
 
 namespace RentFlex.Web.Areas.User.Controllers;
 
-[Area("User")]
+[Area("Owner")]
 public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
