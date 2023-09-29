@@ -1,10 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MediatR;
 
 namespace RentFlex.Application.Features.Estates.Queries;
-internal class GetAllEstatesQuery
+public record GetAllEstatesQuery(Guid OwnerId) : IRequest<IEnumerable<EstateDto>>;
+
+internal class GetAllEstatesQueryHandler : IRequestHandler<GetAllEstatesQuery, IEnumerable<EstateDto>>
 {
+    public Task<IEnumerable<EstateDto>> Handle(GetAllEstatesQuery request, CancellationToken cancellationToken)
+    {
+        throw new NotImplementedException();
+    }
 }
