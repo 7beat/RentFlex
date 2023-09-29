@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using RentFlex.Domain.entities;
 using RentFlex.Infrastructure.Identity;
 using RentFlex.Utility.Converters;
 using System.Reflection;
@@ -11,6 +12,9 @@ internal class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     : base(options)
     {
     }
+
+    public DbSet<Estate> Estates { get; set; }
+    public DbSet<Rental> Rentals { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
