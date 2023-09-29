@@ -5,8 +5,8 @@ public record GetAllEstatesQuery(Guid OwnerId) : IRequest<IEnumerable<EstateDto>
 
 internal class GetAllEstatesQueryHandler : IRequestHandler<GetAllEstatesQuery, IEnumerable<EstateDto>>
 {
-    public Task<IEnumerable<EstateDto>> Handle(GetAllEstatesQuery request, CancellationToken cancellationToken)
+    public async Task<IEnumerable<EstateDto>> Handle(GetAllEstatesQuery request, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        return new List<EstateDto>(); // ToDo: Implement
     }
 }
