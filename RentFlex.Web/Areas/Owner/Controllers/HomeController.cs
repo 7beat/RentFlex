@@ -24,7 +24,8 @@ public class HomeController : Controller
         if (User.Identity!.IsAuthenticated)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            await _mediator.Send(new GetAllEstatesQuery(Guid.Parse(userId!)));
+            var estates = await _mediator.Send(new GetAllEstatesQuery(Guid.Parse(userId!)));
+            // return RedirectToAction("Index", "Estates");
         }
 
         return View();
