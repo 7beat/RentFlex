@@ -3,11 +3,11 @@
 namespace RentFlex.Domain.entities;
 public class Estate : EntityBase
 {
-    public Address Address { get; set; }
     public bool IsAvailable { get; set; }
     public double CostPerDay { get; set; }
     public EstateType EstateType { get; set; }
     public ICollection<string> ImageUrls { get; set; } = default!;
+    public Address Address { get; set; } = default!;
 
     public Guid? BookingReference { get; set; }
     public Guid? AirbnbReference { get; set; }
