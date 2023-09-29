@@ -1,6 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using MediatR;
+using Microsoft.AspNetCore.Mvc;
+using RentFlex.Application.Features.Estates.Queries;
 using RentFlex.Web.Models;
 using System.Diagnostics;
+using System.Security.Claims;
 
 namespace RentFlex.Web.Areas.User.Controllers;
 
@@ -8,14 +11,22 @@ namespace RentFlex.Web.Areas.User.Controllers;
 public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
+    private readonly IMediator _mediator;
 
-    public HomeController(ILogger<HomeController> logger)
+    public HomeController(ILogger<HomeController> logger, IMediator mediator)
     {
         _logger = logger;
+        _mediator = mediator;
     }
 
-    public IActionResult Index()
+    public async Task<IActionResult> Index()
     {
+        if (User.Identity!.IsAuthenticated)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            await _mediator.Send(new GetAllEstatesQuery(Guid.Parse(userId!)));
+        }
+
         return View();
     }
 
