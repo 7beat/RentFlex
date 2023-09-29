@@ -3,6 +3,7 @@
 namespace RentFlex.Domain.entities;
 public class Estate : EntityBase
 {
+    public string PropertyName { get; set; } = default!;
     public bool IsAvailable { get; set; }
     public double CostPerDay { get; set; }
     public EstateType EstateType { get; set; }
