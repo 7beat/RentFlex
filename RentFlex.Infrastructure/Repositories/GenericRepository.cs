@@ -22,9 +22,9 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
         return entity;
     }
 
-    public Task<IEnumerable<TEntity>> FindAllAsync(CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<TEntity>> FindAllAsync(CancellationToken cancellationToken = default)
     {
-        throw new NotImplementedException();
+        return await dbSet.ToListAsync(cancellationToken);
     }
 
     public async Task<IEnumerable<TEntity>> FindAllAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default)
