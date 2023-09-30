@@ -6,7 +6,7 @@ using RentFlex.Utility.Converters;
 using System.Reflection;
 
 namespace RentFlex.Infrastructure.Data;
-internal class ApplicationDbContext : IdentityDbContext<ApplicationUser>
+public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
 {
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
     : base(options)
