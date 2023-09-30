@@ -10,6 +10,7 @@ internal class EstatesConfiguration : IEntityTypeConfiguration<Estate>
     {
         builder.HasKey(e => e.Id);
         builder.OwnsOne(e => e.Address);
+        builder.HasMany(e => e.Rentals).WithOne(e => e.Estate).IsRequired(false);
         builder.Property(e => e.ImageUrls)
             .HasConversion(
             x => JsonConvert.SerializeObject(x),
