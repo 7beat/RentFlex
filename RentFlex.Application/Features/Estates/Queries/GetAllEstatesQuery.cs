@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using RentFlex.Application.Contracts.Persistence;
+using RentFlex.Application.Models;
 
 namespace RentFlex.Application.Features.Estates.Queries;
 public record GetAllEstatesQuery(Guid OwnerId) : IRequest<IEnumerable<EstateDto>>;

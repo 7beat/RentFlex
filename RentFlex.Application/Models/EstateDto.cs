@@ -1,6 +1,6 @@
 ﻿using RentFlex.Domain.entities;
 
-namespace RentFlex.Application.Features.Estates;
+namespace RentFlex.Application.Models;
 public record EstateDto
 {
     public string PropertyName { get; set; } = default!;
