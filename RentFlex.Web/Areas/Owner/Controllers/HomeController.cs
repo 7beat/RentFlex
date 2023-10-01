@@ -1,9 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using RentFlex.Application.Features.Estates.Queries;
 using RentFlex.Web.Models;
 using System.Diagnostics;
-using System.Security.Claims;
 
 namespace RentFlex.Web.Areas.User.Controllers;
 
@@ -23,9 +21,9 @@ public class HomeController : Controller
     {
         if (User.Identity!.IsAuthenticated)
         {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var estates = await _mediator.Send(new GetAllEstatesQuery(Guid.Parse(userId!)));
-            // return RedirectToAction("Index", "Estates");
+            //var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            //var estates = await _mediator.Send(new GetAllEstatesQuery(Guid.Parse(userId!)));
+            return RedirectToAction(nameof(Index), "Estate");
         }
 
         return View();
