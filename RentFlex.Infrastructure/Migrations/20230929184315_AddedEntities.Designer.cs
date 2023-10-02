@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RentFlex.Infrastructure.Data;
 
@@ -11,9 +12,11 @@ using RentFlex.Infrastructure.Data;
 namespace RentFlex.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230929184315_AddedEntities")]
+    partial class AddedEntities
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -174,9 +177,8 @@ namespace RentFlex.Infrastructure.Migrations
                     b.Property<double>("CostPerDay")
                         .HasColumnType("float");
 
-                    b.Property<string>("EstateType")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("EstateType")
+                        .HasColumnType("int");
 
                     b.Property<string>("ImageUrls")
                         .HasColumnType("nvarchar(max)");
@@ -194,17 +196,6 @@ namespace RentFlex.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Estates");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("555daf1f-c760-48d4-9fcf-410cec349f23"),
-                            CostPerDay = 200.0,
-                            EstateType = "Apartment",
-                            IsAvailable = true,
-                            OwnerId = new Guid("6aa43469-b1c8-42b1-aa67-b7240a575f0a"),
-                            PropertyName = "TestProperty"
-                        });
                 });
 
             modelBuilder.Entity("RentFlex.Domain.entities.Rental", b =>
@@ -391,17 +382,6 @@ namespace RentFlex.Infrastructure.Migrations
 
                             b1.WithOwner()
                                 .HasForeignKey("EstateId");
-
-                            b1.HasData(
-                                new
-                                {
-                                    EstateId = new Guid("555daf1f-c760-48d4-9fcf-410cec349f23"),
-                                    City = "Gdańsk",
-                                    Country = "Poland",
-                                    PostalCode = "80-342",
-                                    PropertyNumber = 11,
-                                    StreetName = "Grunwaldzka"
-                                });
                         });
 
                     b.Navigation("Address")
@@ -412,7 +392,9 @@ namespace RentFlex.Infrastructure.Migrations
                 {
                     b.HasOne("RentFlex.Domain.entities.Estate", "Estate")
                         .WithMany("Rentals")
-                        .HasForeignKey("EstateId");
+                        .HasForeignKey("EstateId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Estate");
                 });

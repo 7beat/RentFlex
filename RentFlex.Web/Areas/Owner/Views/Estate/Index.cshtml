@@ -1,0 +1,46 @@
+﻿@model IEnumerable<EstateDto>
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+<div class="container p-3">
+    <div class="row pt-4">
+        <div class="col-6">
+            <h2 class="text-primary">Your Estates</h2>
+        </div>
+        <div class="col-6 text-end">
+            <a class="btn btn-primary" asp-controller="Estate" asp-action="Create">
+                <i class="bi bi-plus-circle"></i> &nbsp; Add New Estate
+            </a>
+        </div>
+    </div>
+</div>
+<br />
+
+
+<div class="container mt-5">
+    @* <h1 class="text-center mb-5">Your Estates</h1> *@
+    <div class="row">
+        @foreach (var estate in Model)
+        {
+            <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+                <div class="card h-100">
+                    <img class="card-img-top" src="@estate.ImageUrls.FirstOrDefault()" alt="@estate.PropertyName">
+                    <div class="card-body">
+                        <h4 class="card-title">@estate.PropertyName</h4>
+                        <p class="card-text">City <b>@estate.City</b></p>
+                        <p class="card-text">Street: @estate.StreetName</p>
+                        <p class="card-text">Cost Per Day: @estate.CostPerDay.ToString("C")</p>
+                    </div>
+                    <div class="card-footer">
+                        <a asp-action="Details" class="btn btn-primary form-control" asp-route-estateId="@estate.Id">
+                            Details
+                        </a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
