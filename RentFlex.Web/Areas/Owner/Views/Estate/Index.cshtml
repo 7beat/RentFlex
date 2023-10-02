@@ -5,8 +5,23 @@
 @{
 }
 
+<div class="container p-3">
+    <div class="row pt-4">
+        <div class="col-6">
+            <h2 class="text-primary">Your Estates</h2>
+        </div>
+        <div class="col-6 text-end">
+            <a class="btn btn-primary" asp-controller="Estate" asp-action="Create">
+                <i class="bi bi-plus-circle"></i> &nbsp; Add New Estate
+            </a>
+        </div>
+    </div>
+</div>
+<br />
+
+
 <div class="container mt-5">
-    <h1 class="text-center mb-5">Your Estates</h1>
+    @* <h1 class="text-center mb-5">Your Estates</h1> *@
     <div class="row">
         @foreach (var estate in Model)
         {
