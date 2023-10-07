@@ -11,7 +11,7 @@
             <h2 class="text-primary">Your Estates</h2>
         </div>
         <div class="col-6 text-end">
-            <a class="btn btn-primary" asp-controller="Estate" asp-action="Create">
+            <a class="btn btn-primary" asp-controller="Estate" asp-action="Upsert">
                 <i class="bi bi-plus-circle"></i> &nbsp; Add New Estate
             </a>
         </div>
@@ -35,7 +35,7 @@
                         <p class="card-text">Cost Per Day: @estate.CostPerDay.ToString("C")</p>
                     </div>
                     <div class="card-footer">
-                        <a asp-action="Details" class="btn btn-primary form-control" asp-route-estateId="@estate.Id">
+                        <a asp-action="Upsert" class="btn btn-primary form-control" asp-route-id="@estate.Id">
                             Details
                         </a>
                     </div>
