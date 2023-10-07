@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using RentFlex.Application.Features.Estates.Commands;
 using RentFlex.Application.Models;
 using RentFlex.Domain.entities;
 
@@ -12,5 +13,11 @@ internal class EstateProfiles : Profile
             .ForMember(dest => dest.City, opt => opt.MapFrom(src => src.Address.City))
             .ForMember(dest => dest.StreetName, opt => opt.MapFrom(src => src.Address.StreetName))
             .ForMember(dest => dest.PropertyNumber, opt => opt.MapFrom(src => src.Address.PropertyNumber));
+
+        CreateMap<UpsertEstateCommand, Estate>()
+            .ReverseMap();
+
+        CreateMap<UpsertEstateCommand, EstateDto>()
+            .ReverseMap();
     }
 }
