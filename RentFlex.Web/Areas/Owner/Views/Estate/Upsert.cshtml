@@ -8,7 +8,7 @@
         <div class="col-10">
             <div class="border p-3 mt-4 row">
                 <div class="col-12 pb-2">
-                    <h2 class="text-primary">@(Model.Estate.Id is not null ? "Update" : "Create") Product</h2>
+                    <h2 class="text-primary">@(Model.Estate.Id is not null ? "Update" : "Create") Estate</h2>
                     <hr />
                 </div>
                 <div asp-validation-summary="All"></div>
@@ -16,6 +16,14 @@
                     <label asp-for="Estate.PropertyName"></label>
                     <input asp-for="Estate.PropertyName" class="form-control" />
                     <span asp-validation-for="Estate.PropertyName" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3 col-6">
+                    <label asp-for="Estate.EstateType"></label>
+                    <select asp-for="Estate.EstateType" asp-items="@Model.EstateType" class="form-select">
+                        <option disabled selected>--Select Estate Type--</option>
+                    </select>
+                    <span asp-validation-for="Estate.EstateType" class="text-danger"></span>
                 </div>
             </div>
         </div>
