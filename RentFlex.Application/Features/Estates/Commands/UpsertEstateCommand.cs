@@ -24,6 +24,8 @@ public record UpsertEstateCommand : IRequest
     // Address
     public string? Country { get; set; }
     public string? City { get; set; }
+    [DisplayName("Postal Code")]
+    public string? PostalCode { get; set; }
     public string? StreetName { get; set; }
     public int? PropertyNumber { get; set; }
 }
