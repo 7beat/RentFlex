@@ -14,6 +14,7 @@ public record EstateDto
     // Address
     public string Country { get; set; } = default!;
     public string City { get; set; } = default!;
+    public string PostalCode { get; set; } = default!;
     public string StreetName { get; set; } = default!;
     public int PropertyNumber { get; set; }
 }
