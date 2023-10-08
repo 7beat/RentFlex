@@ -2,11 +2,9 @@
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using NuGet.Packaging;
 using RentFlex.Application.Features.Estates.Commands;
 using RentFlex.Application.Features.Estates.Queries;
 using RentFlex.Web.Models.ViewModels;
-using System.Collections.ObjectModel;
 using System.Security.Claims;
 
 namespace RentFlex.Web.Areas.Owner.Controllers;
@@ -56,10 +54,9 @@ public class EstateController : Controller
         if (ModelState.IsValid)
         {
             estateVM.Estate.OwnerId = new Guid(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
-            estateVM.Estate.ImageUrls.AddRange(PersistImages(estateImages));
+            estateVM.Estate.ImageUrls = PersistImages(estateImages).ToList();
 
             await _mediator.Send(estateVM.Estate);
-            return RedirectToAction(nameof(Index));
         }
 
         return RedirectToAction(nameof(Index));
@@ -67,7 +64,7 @@ public class EstateController : Controller
 
     private IEnumerable<string> PersistImages(List<IFormFile> images)
     {
-        var imagePaths = new Collection<string>();
+        var imagePaths = new List<string>();
         string wwwRootPath = _webHostEnvironment.WebRootPath;
 
 
