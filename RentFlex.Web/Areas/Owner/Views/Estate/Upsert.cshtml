@@ -3,6 +3,14 @@
 <form method="post" asp-action="Upsert" enctype="multipart/form-data">
     <input asp-for="Estate.Id" hidden />
     <input asp-for="Estate.ImageUrls" hidden />
+    @if (Model.Estate.Id is not null)
+    {
+        <input asp-for="Estate.Country" hidden />
+        <input asp-for="Estate.City" hidden />
+        <input asp-for="Estate.PostalCode" hidden />
+        <input asp-for="Estate.StreetName" hidden />
+        <input asp-for="Estate.PropertyNumber" hidden />
+    }
 
     <div class="row">
         <div class="col-10">
@@ -41,6 +49,36 @@
                     <input id="uploadBox" type="file" name="estateImages" class="form-control" multiple accept="image/*" onchange="displaySelectedFiles(event)" /> @* onchange="displaySelectedFiles(event)" *@
                 </div>
                 <div id="imagePreview"></div>
+
+                @if (Model.Estate.Id is null)
+                {
+                    <div class="mb-3 col-3">
+                        <label asp-for="Estate.Country"></label>
+                        <input asp-for="Estate.Country" class="form-control" />
+                        <span asp-validation-for="Estate.Country" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3 col-3">
+                        <label asp-for="Estate.City"></label>
+                        <input asp-for="Estate.City" class="form-control" />
+                        <span asp-validation-for="Estate.City" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3 col-3">
+                        <label asp-for="Estate.PostalCode"></label>
+                        <input asp-for="Estate.PostalCode" class="form-control" />
+                        <span asp-validation-for="Estate.PostalCode" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3 col-6">
+                        <label asp-for="Estate.StreetName"></label>
+                        <input asp-for="Estate.StreetName" class="form-control" />
+                        <span asp-validation-for="Estate.StreetName" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3 col-3">
+                        <label asp-for="Estate.PropertyNumber"></label>
+                        <input asp-for="Estate.PropertyNumber" class="form-control" />
+                        <span asp-validation-for="Estate.PropertyNumber" class="text-danger"></span>
+                    </div>
+
+                }
 
                 <div class="col-12">
                     @if (Model.Estate.Id is not null)
