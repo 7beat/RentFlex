@@ -1,11 +1,10 @@
-const selectedImages = [];
-
 function displaySelectedFiles(event) {
-    const fileList = event.target.files;
-    const imagePreview = document.getElementById('imagePreview');
+    const previewDiv = document.getElementById('imagePreview');
+    previewDiv.innerHTML = '';
 
-    for (let i = 0; i < fileList.length; i++) {
-        const file = fileList[i];
+    const files = event.target.files;
+    for (let i = 0; i < files.length; i++) {
+        const file = files[i];
         const reader = new FileReader();
 
         reader.onload = function (e) {
@@ -13,31 +12,10 @@ function displaySelectedFiles(event) {
             img.src = e.target.result;
             img.style.maxWidth = '100px';
             img.style.maxHeight = '100px';
-            imagePreview.appendChild(img);
+
+            previewDiv.appendChild(img);
         };
 
         reader.readAsDataURL(file);
     }
-
-    Array.prototype.push.apply(selectedImages, fileList);
 }
-
-document.getElementById('uploadForm').addEventListener('submit', function (event) {
-    event.preventDefault();
-
-    const formData = new FormData();
-
-    for (let i = 0; i < selectedImages.length; i++) {
-        formData.append('images', selectedImages[i]);
-    }
-
-    fetch('your_upload_url', {
-        method: 'POST',
-        body: formData
-    })
-    .then(response => response.json())
-    .then(data => {
-        console.log('Upload successful:', data);
-    })
-    .catch(error => console.error('Error:', error));
-});
