@@ -18,7 +18,7 @@ public record UpsertEstateCommand : IRequest
     [DisplayName("Type of Estate")]
     public EstateType EstateType { get; set; }
     [ValidateNever]
-    public ICollection<string> ImageUrls { get; set; } = default!;
+    public List<string> ImageUrls { get; set; } = default!;
     public Guid OwnerId { get; set; }
 
     // Address
