@@ -67,6 +67,13 @@ public class EstateController : Controller
         return RedirectToAction(nameof(Index));
     }
 
+    [HttpDelete]
+    public async Task<IActionResult> Delete(Guid id)
+    {
+
+        return Ok();
+    }
+
     private IEnumerable<string> PersistImages(List<IFormFile> images)
     {
         var imagePaths = new List<string>();
