@@ -54,7 +54,12 @@ public class EstateController : Controller
         if (ModelState.IsValid)
         {
             estateVM.Estate.OwnerId = new Guid(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
-            estateVM.Estate.ImageUrls = PersistImages(estateImages).ToList();
+
+            if (estateImages.Any())
+            {
+                var images = PersistImages(estateImages).ToList();
+                estateVM.Estate.ImageUrls ??= new List<string>(images);
+            }
 
             await _mediator.Send(estateVM.Estate);
         }
