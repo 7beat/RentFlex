@@ -24,6 +24,7 @@ internal class EstateProfiles : Profile
                 StreetName = src.StreetName!,
                 PropertyNumber = src.PropertyNumber.HasValue ? (int)src.PropertyNumber : default
             }))
+            .ForMember(dest => dest.ImageUrls, opt => opt.Ignore())
             .ReverseMap();
 
 
