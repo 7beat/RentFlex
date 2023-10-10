@@ -42,15 +42,26 @@ internal class UpsertEstateCommandHandler : IRequestHandler<UpsertEstateCommand>
 
     public async Task Handle(UpsertEstateCommand request, CancellationToken cancellationToken)
     {
-        var estate = mapper.Map<Estate>(request);
-
         if (request.Id is null)
         {
+            var estate = mapper.Map<Estate>(request);
+            estate.ImageUrls = new(request.ImageUrls);
             await unitOfWork.Estates.AddAsync(estate);
         }
         else
         {
-            unitOfWork.Estates.Update(estate);
+            var estateDb = await unitOfWork.Estates.FindSingleAsync(e => e.Id == request.Id, cancellationToken);
+            mapper.Map(request, estateDb);
+            if (request.ImageUrls is not null)
+            {
+                var newImages = estateDb.ImageUrls is null ?
+                    new List<string>(request.ImageUrls) :
+                    estateDb.ImageUrls.Concat(request.ImageUrls);
+
+                estateDb.ImageUrls = new List<string>(newImages);
+            }
+
+            unitOfWork.Estates.Update(estateDb);
         }
 
         await unitOfWork.SaveChangesAsync();
