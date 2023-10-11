@@ -54,8 +54,22 @@
                     <label asp-for="Estate.ImageUrls"></label>
                     <input id="uploadBox" type="file" name="estateImages" class="form-control" multiple accept="image/*" onchange="displaySelectedFiles(event)" /> @* onchange="displaySelectedFiles(event)" *@
                 </div>
-                <div id="imagePreview"></div>
+                @* <div id="imagePreview"></div> // Old*@
 
+                <div id="imagePreview" class="d-flex flex-wrap">
+                    @for (var i = 0; i < Model.Estate.ImageUrls.Count; i++)
+                    {
+                        <div class="image-container">
+                            <img src="@Model.Estate.ImageUrls[i]" alt="Image @(i + 1)" class="thumbnail-image" />
+                            <label>
+                                <input asp-asp-for="@Model.ThumbnailImage" type="radio" name="thumbnailSelection" value="@i" @if (i == 0)
+                                {
+                                    <text>checked</text>
+                                }> Set as Thumbnail
+                            </label>
+                        </div>
+                    }
+                </div>
                 @if (Model.Estate.Id is null)
                 {
                     <div class="mb-3 col-3">
@@ -110,7 +124,7 @@
         <partial name="_ValidationScriptsPartial" />
     }
     <script src="~/js/tinymce.js"></script>
-    <script src="~/js/upsertEstateImages.js"></script>
+    @* <script src="~/js/upsertEstateImages.js"></script> *@
 
     <script>
         // SweetAlerts setup
@@ -157,3 +171,18 @@
 
     </script>
 }
+
+<style>
+    .image-container {
+        width: 100px;
+        margin-right: 10px;
+        margin-bottom: 10px;
+        text-align: center;
+    }
+
+    .thumbnail-image {
+        width: 100px;
+        height: 100px;
+        object-fit: cover;
+    }
+</style>
