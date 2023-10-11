@@ -64,14 +64,19 @@ public class EstateController : Controller
             await _mediator.Send(estateVM.Estate);
         }
 
+        TempData["success"] = estateVM.Estate.Id is null ? "Product created successfully" : "Product updated successfully";
+
         return RedirectToAction(nameof(Index));
     }
 
     [HttpDelete]
     public async Task<IActionResult> Delete(Guid id)
     {
+        await _mediator.Send(new DeleteEstateCommand(id));
 
-        return Ok();
+        TempData["success"] = "Estate deleted successfully!!";
+        return Json(new { success = true });
+        //return Json(new { success = true, message = $"Estate deleted successfully!" });
     }
 
     private IEnumerable<string> PersistImages(List<IFormFile> images)
