@@ -2,6 +2,7 @@
 
 <form method="post" asp-action="Upsert" enctype="multipart/form-data">
     <input asp-for="Estate.Id" hidden />
+    <input asp-for="@Model.ThumbnailImage" id="ThumbnailImage" hidden />
     @if (Model.Estate.Id is not null)
     {
         <input asp-for="Estate.Country" hidden />
@@ -52,7 +53,7 @@
                 </div>
                 <div class="mb-3">
                     <label asp-for="Estate.ImageUrls"></label>
-                    <input id="uploadBox" type="file" name="estateImages" class="form-control" multiple accept="image/*" onchange="displaySelectedFiles(event)" /> @* onchange="displaySelectedFiles(event)" *@
+                    <input id="uploadBox" type="file" name="estateImages" class="form-control" multiple accept="image/*" onchange="displaySelectedFiles(event)" />
                 </div>
                 @* <div id="imagePreview"></div> // Old*@
 
@@ -60,13 +61,10 @@
                     @for (var i = 0; i < Model.Estate.ImageUrls.Count; i++)
                     {
                         <div class="image-container">
-                            <img src="@Model.Estate.ImageUrls[i]" alt="Image @(i + 1)" class="thumbnail-image" />
+                            <img src="@Model.Estate.ImageUrls[i]" alt="Image @(i + 1)" class="thumbnail-image" />   
                             <label>
-                                <input asp-asp-for="@Model.ThumbnailImage" type="radio" name="thumbnailSelection" value="@i" @if (i == 0)
-                                {
-                                    <text>checked</text>
-                                }> Set as Thumbnail
-                            </label>
+                                <input type="radio" name="thumbnailSelection" value="@i" @(i == 0 ? "checked" : "") onclick="setThumbnail(@i)"> Set as Thumbnail
+                            </label> 
                         </div>
                     }
                 </div>
@@ -168,6 +166,13 @@
                 }
             })
         }
+
+        
+        function setThumbnail(index) {
+            // Assuming Model.ThumbnailImage is a property on your model
+            document.getElementById('ThumbnailImage').value = index;
+        }
+    
 
     </script>
 }

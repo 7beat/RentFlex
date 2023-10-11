@@ -8,6 +8,7 @@ namespace RentFlex.Web.Models.ViewModels;
 public class UpsertEstateVM
 {
     public UpsertEstateCommand Estate { get; set; } = default!;
+    public int ThumbnailImage { get; set; }
     [ValidateNever]
     public IEnumerable<SelectListItem> EstateType { get; set; }
 
