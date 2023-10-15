@@ -21,7 +21,6 @@
 
 
 <div class="container mt-5">
-    @* <h1 class="text-center mb-5">Your Estates</h1> *@
     <div class="row">
         @foreach (var estate in Model)
         {
@@ -30,6 +29,7 @@
                     <img class="card-img-top" src="@estate.ImageUrls.FirstOrDefault()" alt="@estate.PropertyName">
                     <div class="card-body">
                         <h4 class="card-title">@estate.PropertyName</h4>
+                        <h5 class="card-text">@estate.EstateType</h5>
                         <p class="card-text">City <b>@estate.City</b></p>
                         <p class="card-text">Street: @estate.StreetName</p>
                         <p class="card-text">Cost Per Day: @estate.CostPerDay.ToString("C")</p>
