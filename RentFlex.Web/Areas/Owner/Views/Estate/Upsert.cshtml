@@ -75,7 +75,9 @@
                 {
                     <div class="mb-3 col-3">
                         <label asp-for="Estate.Country"></label>
-                        <input asp-for="Estate.Country" class="form-control" />
+                        <select asp-for="Estate.Country" asp-items="@Model.Country" class="form-select">
+                            <option disabled selected>--Select Country--</option>
+                        </select>
                         <span asp-validation-for="Estate.Country" class="text-danger"></span>
                     </div>
                     <div class="mb-3 col-3">
