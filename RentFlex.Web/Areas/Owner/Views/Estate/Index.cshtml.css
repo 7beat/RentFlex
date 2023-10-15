@@ -1,0 +1,30 @@
+﻿.estate-card {
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    transition: transform 0.3s ease-in-out;
+}
+
+.estate-card:hover {
+    transform: scale(1.05);
+}
+
+.estate-type {
+    color: #28a745;
+}
+
+.address-section {
+    margin-top: 10px;
+}
+
+.address-section .label {
+    font-weight: bold;
+}
+
+.cost-per-day {
+    margin-top: 10px;
+}
+
+.cost-per-day span {
+    font-weight: bold;
+}
+

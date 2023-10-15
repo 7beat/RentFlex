@@ -24,18 +24,19 @@
     <div class="row">
         @foreach (var estate in Model)
         {
-            <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
-                <div class="card h-100">
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="card estate-card">
                     <img class="card-img-top" src="@estate.ImageUrls.FirstOrDefault()" alt="@estate.PropertyName">
                     <div class="card-body">
                         <h4 class="card-title">@estate.PropertyName</h4>
-                        <h5 class="card-text">@estate.EstateType</h5>
-                        <p class="card-text">City <b>@estate.City</b></p>
-                        <p class="card-text">Street: @estate.StreetName</p>
-                        <p class="card-text">Cost Per Day: @estate.CostPerDay.ToString("C")</p>
+                        <h5 class="card-text estate-type">@estate.EstateType</h5>
+                        <div class="address-section">
+                            <p class="card-text"><span class="label">Address:</span><br>@estate.StreetName @estate.PropertyNumber, @estate.City</p>
+                        </div>
+                        <p class="card-text cost-per-day">Cost Per Day: <span>@estate.CostPerDay.ToString("C")</span></p>
                     </div>
                     <div class="card-footer">
-                        <a asp-action="Upsert" class="btn btn-primary form-control" asp-route-id="@estate.Id">
+                        <a asp-action="Upsert" class="btn btn-primary btn-block" asp-route-id="@estate.Id">
                             Details
                         </a>
                     </div>
