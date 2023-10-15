@@ -58,14 +58,17 @@
                 @* <div id="imagePreview"></div> // Old*@
 
                 <div id="imagePreview" class="d-flex flex-wrap">
-                    @for (var i = 0; i < Model.Estate.ImageUrls.Count; i++)
+                    @if (Model.Estate.Id is not null)
                     {
-                        <div class="image-container">
-                            <img src="@Model.Estate.ImageUrls[i]" alt="Image @(i + 1)" class="thumbnail-image" />   
-                            <label>
-                                <input type="radio" name="thumbnailSelection" value="@i" @(i == 0 ? "checked" : "") onclick="setThumbnail(@i)"> Set as Thumbnail
-                            </label> 
-                        </div>
+                        @for (var i = 0; i < Model.Estate.ImageUrls.Count; i++)
+                        {
+                            <div class="image-container">
+                                <img src="@Model.Estate.ImageUrls[i]" alt="Image @(i + 1)" class="thumbnail-image" />
+                                <label>
+                                    <input type="radio" name="thumbnailSelection" value="@i" @(i == 0 ? "checked" : "") onclick="setThumbnail(@i)"> Set as Thumbnail
+                                </label>
+                            </div>
+                        }
                     }
                 </div>
                 @if (Model.Estate.Id is null)
