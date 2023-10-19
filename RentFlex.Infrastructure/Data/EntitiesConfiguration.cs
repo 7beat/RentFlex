@@ -15,7 +15,7 @@ internal class EstatesConfiguration : IEntityTypeConfiguration<Estate>
         builder.Property(e => e.ImageUrls)
             .HasConversion(
             x => JsonConvert.SerializeObject(x),
-            x => JsonConvert.DeserializeObject<ICollection<string>>(x)!)
+            x => JsonConvert.DeserializeObject<List<string>>(x)!)
             .IsRequired(false);
 
         builder.HasData(new Estate()
