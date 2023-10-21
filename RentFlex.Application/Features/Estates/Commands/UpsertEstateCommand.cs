@@ -17,6 +17,7 @@ public record UpsertEstateCommand : IRequest
     public double CostPerDay { get; set; }
     [DisplayName("Type of Estate")]
     public EstateType EstateType { get; set; }
+    public int ThumbnailImage { get; set; }
     [ValidateNever]
     public List<string> ImageUrls { get; set; } = default!;
     public Guid OwnerId { get; set; }
@@ -59,6 +60,11 @@ internal class UpsertEstateCommandHandler : IRequestHandler<UpsertEstateCommand>
                     estateDb.ImageUrls.Concat(request.ImageUrls);
 
                 estateDb.ImageUrls = new List<string>(newImages);
+            }
+
+            if (estateDb.ImageUrls[request.ThumbnailImage] != estateDb.ThumbnailImageUrl)
+            {
+                estateDb.ThumbnailImageUrl = estateDb.ImageUrls[request.ThumbnailImage];
             }
 
             unitOfWork.Estates.Update(estateDb);
