@@ -7,6 +7,7 @@ public class Estate : EntityBase
     public bool IsAvailable { get; set; }
     public double CostPerDay { get; set; }
     public EstateType EstateType { get; set; }
+    public string? ThumbnailImageUrl { get; set; } = default!;
     public List<string> ImageUrls { get; set; } = default!;
     public Address Address { get; set; } = default!;
 

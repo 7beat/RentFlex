@@ -2,7 +2,7 @@
 
 <form method="post" asp-action="Upsert" enctype="multipart/form-data">
     <input asp-for="Estate.Id" hidden />
-    <input asp-for="@Model.ThumbnailImage" id="ThumbnailImage" hidden />
+    <input asp-for="Estate.ThumbnailImage" id="ThumbnailImage" hidden />
     @if (Model.Estate.Id is not null)
     {
         <input asp-for="Estate.Country" hidden />

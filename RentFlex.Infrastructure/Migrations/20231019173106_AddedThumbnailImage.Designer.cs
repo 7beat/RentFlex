@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RentFlex.Infrastructure.Data;
 
@@ -11,9 +12,11 @@ using RentFlex.Infrastructure.Data;
 namespace RentFlex.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231019173106_AddedThumbnailImage")]
+    partial class AddedThumbnailImage
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -191,8 +194,8 @@ namespace RentFlex.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ThumbnailImageUrl")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int?>("ThumbnailImage")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
