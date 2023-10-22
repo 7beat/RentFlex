@@ -1,3 +1,4 @@
+using RentFlex.Utility.WireMock;
 using RentFlex.Web.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -6,8 +7,14 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.RegisterServices(builder.Configuration);
 builder.Services.AddControllersWithViews();
 
+builder.Services.AddHttpClient("WireMockClient", client =>
+{
+    client.BaseAddress = new Uri("http://localhost:5000");
+});
+
 var app = builder.Build();
 
+WireMockService.Start();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
