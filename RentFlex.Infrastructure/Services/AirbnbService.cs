@@ -19,6 +19,11 @@ public class AirbnbService : IAirbnbService
             .Handle<Exception>()
             .WaitAndRetryAsync(2, sd => TimeSpan.FromSeconds(20));
 
+        circutBreakerPolicy = Policy
+            .Handle<Exception>()
+            .CircuitBreakerAsync(
+            exceptionsAllowedBeforeBreaking: 3,
+            durationOfBreak: TimeSpan.FromSeconds(30));
     }
 
     public async Task Test()
