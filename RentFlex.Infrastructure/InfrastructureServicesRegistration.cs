@@ -2,10 +2,12 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using RentFlex.Application.Contracts.Infrastructure.Services;
 using RentFlex.Application.Contracts.Persistence;
 using RentFlex.Infrastructure.Data;
 using RentFlex.Infrastructure.Identity;
 using RentFlex.Infrastructure.Repositories;
+using RentFlex.Infrastructure.Services;
 
 namespace RentFlex.Infrastructure;
 public static class InfrastructureServicesRegistration
@@ -15,6 +17,8 @@ public static class InfrastructureServicesRegistration
         services.ConfigureDbContext(configuration);
         services.ConfigureIdentity();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
+        services.ConfigureServices();
+        // Move WireMock here?
     }
 
     private static void ConfigureDbContext(this IServiceCollection services, IConfiguration configuration)
@@ -37,5 +41,10 @@ public static class InfrastructureServicesRegistration
         })
         .AddEntityFrameworkStores<ApplicationDbContext>()
         .AddDefaultTokenProviders();
+    }
+
+    private static void ConfigureServices(this IServiceCollection services)
+    {
+        services.AddScoped<IAirbnbService, AirbnbService>();
     }
 }
