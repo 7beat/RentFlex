@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using RentFlex.Application.Contracts.Identity;
 using RentFlex.Application.Contracts.Infrastructure.Services;
 using RentFlex.Application.Contracts.Persistence;
 using RentFlex.Infrastructure.Data;
@@ -45,6 +46,7 @@ public static class InfrastructureServicesRegistration
 
     private static void ConfigureServices(this IServiceCollection services)
     {
+        services.AddTransient<IAuthService, AuthService>();
         services.AddScoped<IAirbnbService, AirbnbService>();
     }
 }
