@@ -36,12 +36,19 @@ public static class InfrastructureServicesRegistration
 
     private static void ConfigureIdentity(this IServiceCollection services)
     {
-        services.AddDefaultIdentity<ApplicationUser>(o =>
+        services.AddIdentity<ApplicationUser, IdentityRole>(o =>
         {
             o.User.RequireUniqueEmail = true;
         })
         .AddEntityFrameworkStores<ApplicationDbContext>()
-        .AddDefaultTokenProviders();
+        .AddDefaultTokenProviders()
+        .AddDefaultUI();
+
+        services.ConfigureApplicationCookie(options =>
+        {
+            options.LoginPath = "/Account/Login";
+            options.LogoutPath = "/Account/Logout";
+        });
     }
 
     private static void ConfigureServices(this IServiceCollection services)
