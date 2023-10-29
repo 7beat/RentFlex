@@ -111,6 +111,7 @@ namespace RentFlex.Web.Areas.Identity.Pages.Account
                 user.LastName = "Test";
                 user.Birthday = new(1999, 06, 08);
 
+                await _userManager.AddToRoleAsync(user, "User");
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
                 var result = await _userManager.CreateAsync(user, Input.Password);
