@@ -19,6 +19,7 @@ public record UpsertEstateCommand : IRequest
     public EstateType EstateType { get; set; }
     public int ThumbnailImage { get; set; }
     [ValidateNever]
+    [DisplayName("Images")]
     public List<string> ImageUrls { get; set; } = default!;
     public Guid OwnerId { get; set; }
 
@@ -46,6 +47,7 @@ internal class UpsertEstateCommandHandler : IRequestHandler<UpsertEstateCommand>
         if (request.Id is null)
         {
             var estate = mapper.Map<Estate>(request);
+            estate.ThumbnailImageUrl = request.ImageUrls.FirstOrDefault();
             estate.ImageUrls = new(request.ImageUrls);
             await unitOfWork.Estates.AddAsync(estate);
         }

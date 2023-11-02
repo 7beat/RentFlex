@@ -1,3 +1,4 @@
+using CarRental.Infrastructure.Extensions;
 using RentFlex.Utility.WireMock;
 using RentFlex.Web.Configuration;
 
@@ -6,6 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.RegisterServices(builder.Configuration);
 builder.Services.AddControllersWithViews();
+builder.Services.AddRazorPages();
 
 builder.Services.AddHttpClient("WireMockClient", client =>
 {
@@ -13,6 +15,8 @@ builder.Services.AddHttpClient("WireMockClient", client =>
 });
 
 var app = builder.Build();
+
+await app.SeedIdentityAsync();
 
 WireMockService.Start();
 // Configure the HTTP request pipeline.

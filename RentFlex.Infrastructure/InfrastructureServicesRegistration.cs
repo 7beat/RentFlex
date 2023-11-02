@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using RentFlex.Application.Contracts.Identity;
 using RentFlex.Application.Contracts.Infrastructure.Services;
 using RentFlex.Application.Contracts.Persistence;
 using RentFlex.Infrastructure.Data;
@@ -35,16 +36,24 @@ public static class InfrastructureServicesRegistration
 
     private static void ConfigureIdentity(this IServiceCollection services)
     {
-        services.AddDefaultIdentity<ApplicationUser>(o =>
+        services.AddIdentity<ApplicationUser, IdentityRole>(o =>
         {
             o.User.RequireUniqueEmail = true;
         })
         .AddEntityFrameworkStores<ApplicationDbContext>()
-        .AddDefaultTokenProviders();
+        .AddDefaultTokenProviders()
+        .AddDefaultUI();
+
+        services.ConfigureApplicationCookie(options =>
+        {
+            options.LoginPath = "/Account/Login";
+            options.LogoutPath = "/Account/Logout";
+        });
     }
 
     private static void ConfigureServices(this IServiceCollection services)
     {
+        services.AddTransient<IAuthService, AuthService>();
         services.AddScoped<IAirbnbService, AirbnbService>();
     }
 }
