@@ -9,11 +9,6 @@ builder.Services.RegisterServices(builder.Configuration);
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 
-builder.Services.AddHttpClient("WireMockClient", client =>
-{
-    client.BaseAddress = new Uri("http://localhost:5000");
-});
-
 var app = builder.Build();
 
 await app.SeedIdentityAsync();

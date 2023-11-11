@@ -19,7 +19,11 @@ public static class InfrastructureServicesRegistration
         services.ConfigureIdentity();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.ConfigureServices();
-        // Move WireMock here?
+
+        services.AddHttpClient("WireMockClient", client =>
+        {
+            client.BaseAddress = new Uri("http://localhost:5000");
+        });
     }
 
     private static void ConfigureDbContext(this IServiceCollection services, IConfiguration configuration)
