@@ -89,6 +89,10 @@ namespace RentFlex.Web.Areas.Identity.Pages.Account
             [Display(Name = "Confirm password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
+
+            [Required]
+            [StringLength(50, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 3)]
+            public string Username { get; set; }
         }
 
 
@@ -110,7 +114,7 @@ namespace RentFlex.Web.Areas.Identity.Pages.Account
                 user.Birthday = new(1999, 06, 08);
 
                 await _userManager.AddToRoleAsync(user, "User");
-                await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
+                await _userStore.SetUserNameAsync(user, Input.Username, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
                 var result = await _userManager.CreateAsync(user, Input.Password);
 
