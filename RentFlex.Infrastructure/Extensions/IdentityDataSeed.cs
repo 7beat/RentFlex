@@ -36,7 +36,7 @@ public static class IdentityDataSeed
     {
         var userManager = serviceProvider.GetService<UserManager<ApplicationUser>>();
 
-        var user = await userManager.FindByNameAsync(userName);
+        var user = await userManager!.FindByNameAsync(userName);
 
         if (user is null)
         {
@@ -66,14 +66,14 @@ public static class IdentityDataSeed
 
         IdentityResult ir;
 
-        if (!await roleManager.RoleExistsAsync(role))
+        if (!await roleManager!.RoleExistsAsync(role))
         {
             ir = await roleManager.CreateAsync(new(role));
         }
 
         var userManager = serviceProvider.GetService<UserManager<ApplicationUser>>();
 
-        var user = await userManager.FindByIdAsync(uid.ToString());
+        var user = await userManager!.FindByIdAsync(uid.ToString());
 
         if (user is null)
             throw new Exception("User not existing");
