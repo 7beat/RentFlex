@@ -30,6 +30,12 @@ public record UpsertEstateCommand : IRequest
     public string? PostalCode { get; set; }
     public string? StreetName { get; set; }
     public int? PropertyNumber { get; set; }
+
+    // External
+    [DisplayName("Publicate to Booking.com")]
+    public bool PublicateAirbnb { get; set; }
+    [DisplayName("Publicate to Airbnb")]
+    public bool PublicateBooking { get; set; }
 }
 
 internal class UpsertEstateCommandHandler : IRequestHandler<UpsertEstateCommand>
@@ -73,5 +79,10 @@ internal class UpsertEstateCommandHandler : IRequestHandler<UpsertEstateCommand>
         }
 
         await unitOfWork.SaveChangesAsync();
+
+        if (request.PublicateAirbnb)
+        {
+            // AirbnbServicePublicate
+        }
     }
 }

@@ -103,6 +103,16 @@
 
                 }
 
+                <div class="mb-3">
+                    <label asp-for="Estate.PublicateBooking"></label>
+                    <input asp-for="Estate.PublicateBooking" type="checkbox" />
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Estate.PublicateAirbnb"></label>
+                    <input asp-for="Estate.PublicateAirbnb" type="checkbox" />
+                </div>
+
                 <div class="col-12">
                     @if (Model.Estate.Id is not null)
                     {
