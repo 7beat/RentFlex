@@ -1,5 +1,5 @@
 ﻿namespace RentFlex.Utility.WireMock.Responses.Common;
-public class Address
+public class AddressResponse
 {
     public string Country { get; set; } = default!;
     public string City { get; set; } = default!;

@@ -1,5 +1,5 @@
 ﻿namespace RentFlex.Utility.WireMock.Responses.Common;
-public enum EstateType
+public enum EstateTypeResponse
 {
     House,
     Apartment,
