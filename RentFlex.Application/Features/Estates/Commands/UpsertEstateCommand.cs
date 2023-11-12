@@ -58,12 +58,14 @@ internal class UpsertEstateCommandHandler : IRequestHandler<UpsertEstateCommand>
             var estate = mapper.Map<Estate>(request);
             estate.ThumbnailImageUrl = request.ImageUrls.FirstOrDefault();
             estate.ImageUrls = new(request.ImageUrls);
-            await unitOfWork.Estates.AddAsync(estate, cancellationToken);
 
-            if (request.PublishAirbnb || request.PublishBooking)
-            {
-                await CreatePublish(estate, request.PublishAirbnb, request.PublishBooking);
-            }
+            estate.AirbnbReference = request.PublishAirbnb is false ?
+                null :
+                await airbnbService.CreateEstateAsync(estate);
+
+            // estate.BookingReference = request.PublishBooking is false ? // ToDo: Finish when service is ready
+
+            await unitOfWork.Estates.AddAsync(estate, cancellationToken);
         }
         else
         {
@@ -97,20 +99,6 @@ internal class UpsertEstateCommandHandler : IRequestHandler<UpsertEstateCommand>
         }
 
 #endif
-
-    }
-
-    private async Task CreatePublish(Estate estate, bool airbnb, bool booking)
-    {
-        if (airbnb)
-        {
-            estate.AirbnbReference = await airbnbService.CreateEstateAsync(estate);
-        }
-
-        if (booking)
-        {
-            //estate.BookingReference = 
-        }
 
     }
 }
