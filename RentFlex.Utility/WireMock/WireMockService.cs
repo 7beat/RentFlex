@@ -46,5 +46,9 @@ public static class WireMockService
         var jsonAllAirbnbEstates = JsonConvert.SerializeObject(ResponseGenerator.GetAllAirbnbEstatesResponse(), Formatting.Indented);
         wireMockServer.Given(Request.Create().WithPath($"/airbnb/88e3ffd5-0de9-487b-a053-da87bcca62cf/estates").UsingGet())
             .RespondWith(Response.Create().WithStatusCode(200).WithBody(jsonAllAirbnbEstates));
+
+        // CreateAirbnbEstate
+        wireMockServer.Given(Request.Create().WithPath("/airbnb/88e3ffd5-0de9-487b-a053-da87bcca62cf/estates").UsingPost())
+            .RespondWith(Response.Create().WithStatusCode(201).WithBody(Guid.NewGuid().ToString()));
     }
 }
