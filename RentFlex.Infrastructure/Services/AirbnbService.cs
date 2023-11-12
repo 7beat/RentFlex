@@ -4,6 +4,7 @@ using Polly.CircuitBreaker;
 using Polly.Retry;
 using RentFlex.Application.Contracts.Infrastructure.Services;
 using RentFlex.Domain.entities;
+using System.Text;
 
 namespace RentFlex.Infrastructure.Services;
 public class AirbnbService : IAirbnbService
@@ -72,5 +73,33 @@ public class AirbnbService : IAirbnbService
         }
 
         return estates;
+    }
+
+    public async Task<Guid> CreateEstateAsync(Estate estate)
+    {
+        Guid guid = new();
+
+        try
+        {
+            await circutBreakerPolicy.ExecuteAsync(async () =>
+            {
+                var apiResponse = await httpClient.PostAsync($"/airbnb/88e3ffd5-0de9-487b-a053-da87bcca62cf/estates",
+                    new StringContent(JsonConvert.SerializeObject(estate), Encoding.UTF8, "application/json"));
+
+                var response = await apiResponse.Content.ReadAsStringAsync();
+
+                if (!string.IsNullOrEmpty(response))
+                {
+                    guid = Guid.Parse(response);
+                }
+            });
+        }
+        catch (Exception ex)
+        {
+            await Console.Out.WriteLineAsync(ex.Message);
+            throw;
+        }
+
+        return guid;
     }
 }

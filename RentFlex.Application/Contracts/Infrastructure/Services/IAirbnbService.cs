@@ -5,4 +5,5 @@ public interface IAirbnbService
 {
     Task Test();
     Task<IEnumerable<Estate>> GetAllEstatesAsync(Guid airbnbReference);
+    Task<Guid> CreateEstateAsync(Estate estate);
 }
