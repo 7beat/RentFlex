@@ -50,5 +50,13 @@ public static class WireMockService
         // CreateAirbnbEstate
         wireMockServer.Given(Request.Create().WithPath("/airbnb/88e3ffd5-0de9-487b-a053-da87bcca62cf/estates").UsingPost())
             .RespondWith(Response.Create().WithStatusCode(201).WithBody(Guid.NewGuid().ToString()));
+
+        // UpdateAirbnbEstate
+        wireMockServer.Given(Request.Create().WithPath("/airbnb/88e3ffd5-0de9-487b-a053-da87bcca62cf/estates/7579550f-a641-457d-ba59-47e31c87dbee").UsingPatch())
+            .RespondWith(Response.Create().WithStatusCode(200).WithBody("Estate with Id = 7579550f-a641-457d-ba59-47e31c87dbee was succesfully updated"));
+
+        // DeleteAirbnbEstate
+        wireMockServer.Given(Request.Create().WithPath("/airbnb/88e3ffd5-0de9-487b-a053-da87bcca62cf/estates/7579550f-a641-457d-ba59-47e31c87dbee").UsingDelete())
+            .RespondWith(Response.Create().WithStatusCode(204).WithBody("Estate with Id = 7579550f-a641-457d-ba59-47e31c87dbee was succesfully deleted"));
     }
 }
