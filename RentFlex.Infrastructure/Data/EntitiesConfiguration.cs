@@ -11,7 +11,7 @@ internal class EstatesConfiguration : IEntityTypeConfiguration<Estate>
         builder.HasKey(e => e.Id);
         builder.Property(e => e.EstateType).HasConversion<string>();
         builder.HasMany(e => e.Rentals).WithOne(e => e.Estate).IsRequired(false);
-        builder.HasOne(e => e.ApplicationUser).WithMany(u => u.Estates).HasForeignKey(e => e.OwnerId);
+        builder.HasOne(e => e.ApplicationUser).WithMany(u => u.Estates).HasForeignKey(e => e.UserId);
         builder.Property(e => e.ImageUrls)
             .HasConversion(
             x => JsonConvert.SerializeObject(x),

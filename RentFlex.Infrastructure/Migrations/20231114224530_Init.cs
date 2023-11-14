@@ -179,14 +179,14 @@ namespace RentFlex.Infrastructure.Migrations
                     Address_PropertyNumber = table.Column<int>(type: "int", nullable: false),
                     BookingReference = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     AirbnbReference = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    OwnerId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Estates", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Estates_AspNetUsers_OwnerId",
-                        column: x => x.OwnerId,
+                        name: "FK_Estates_AspNetUsers_UserId",
+                        column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id");
                 });
@@ -213,8 +213,8 @@ namespace RentFlex.Infrastructure.Migrations
 
             migrationBuilder.InsertData(
                 table: "Estates",
-                columns: new[] { "Id", "Address_City", "Address_Country", "Address_PostalCode", "Address_PropertyNumber", "Address_StreetName", "AirbnbReference", "BookingReference", "CostPerDay", "EstateType", "ImageUrls", "IsAvailable", "OwnerId", "PropertyName", "ThumbnailImageUrl" },
-                values: new object[] { new Guid("555daf1f-c760-48d4-9fcf-410cec349f23"), "Gdańsk", "Poland", "80-342", 11, "Grunwaldzka", new Guid("9d1063e1-125e-45c6-bef3-d5baaa717152"), new Guid("9d1063e1-125e-45c6-bef3-d5baaa717152"), 200.0, "Apartment", null, true, null, "TestProperty", null });
+                columns: new[] { "Id", "Address_City", "Address_Country", "Address_PostalCode", "Address_PropertyNumber", "Address_StreetName", "AirbnbReference", "BookingReference", "CostPerDay", "EstateType", "ImageUrls", "IsAvailable", "PropertyName", "ThumbnailImageUrl", "UserId" },
+                values: new object[] { new Guid("555daf1f-c760-48d4-9fcf-410cec349f23"), "Gdańsk", "Poland", "80-342", 11, "Grunwaldzka", new Guid("9d1063e1-125e-45c6-bef3-d5baaa717152"), new Guid("9d1063e1-125e-45c6-bef3-d5baaa717152"), 200.0, "Apartment", null, true, "TestProperty", null, null });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -256,9 +256,9 @@ namespace RentFlex.Infrastructure.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Estates_OwnerId",
+                name: "IX_Estates_UserId",
                 table: "Estates",
-                column: "OwnerId");
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Rentals_EstateId",

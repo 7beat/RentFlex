@@ -262,9 +262,6 @@ namespace RentFlex.Infrastructure.Migrations
                     b.Property<bool>("IsAvailable")
                         .HasColumnType("bit");
 
-                    b.Property<string>("OwnerId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<string>("PropertyName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -272,9 +269,12 @@ namespace RentFlex.Infrastructure.Migrations
                     b.Property<string>("ThumbnailImageUrl")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("OwnerId");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Estates");
 
@@ -371,7 +371,7 @@ namespace RentFlex.Infrastructure.Migrations
                 {
                     b.HasOne("RentFlex.Domain.Entities.ApplicationUser", "ApplicationUser")
                         .WithMany("Estates")
-                        .HasForeignKey("OwnerId");
+                        .HasForeignKey("UserId");
 
                     b.OwnsOne("RentFlex.Domain.entities.Address", "Address", b1 =>
                         {

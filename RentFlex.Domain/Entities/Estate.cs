@@ -16,8 +16,8 @@ public class Estate : EntityBase
     public Guid? AirbnbReference { get; set; }
 
     public ICollection<Rental> Rentals { get; set; } = default!;
-    public string? OwnerId { get; set; }
-    public ApplicationUser ApplicationUser { get; set; } = default!;
+    public string? UserId { get; set; }
+    public ApplicationUser? ApplicationUser { get; set; } = default!;
 }
 
 // Owned
