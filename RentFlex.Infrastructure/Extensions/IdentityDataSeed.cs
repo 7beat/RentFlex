@@ -47,7 +47,9 @@ public static class IdentityDataSeed
                 EmailConfirmed = true,
                 FirstName = "John",
                 LastName = "Doe",
-                Birthday = new(1999, 06, 08)
+                Birthday = new(1999, 06, 08),
+                AirbnbReference = userName.Equals("User") ? Guid.Parse("592fdf9f-2395-4a12-8f66-1e8b3b53b6fc") : null,
+                BookingReference = userName.Equals("User") ? Guid.Parse("592fdf9f-2395-4a12-8f66-1e8b3b53b6fc") : null
             };
 
             var result = await userManager.CreateAsync(user, initPw);
