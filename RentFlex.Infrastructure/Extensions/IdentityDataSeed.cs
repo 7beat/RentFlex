@@ -36,7 +36,7 @@ public static class IdentityDataSeed
     {
         var userManager = serviceProvider.GetService<UserManager<ApplicationUser>>();
 
-        var user = await userManager.FindByNameAsync(userName);
+        var user = await userManager!.FindByNameAsync(userName);
 
         if (user is null)
         {
@@ -47,7 +47,9 @@ public static class IdentityDataSeed
                 EmailConfirmed = true,
                 FirstName = "John",
                 LastName = "Doe",
-                Birthday = new(1999, 06, 08)
+                Birthday = new(1999, 06, 08),
+                AirbnbReference = userName.Equals("User") ? Guid.Parse("592fdf9f-2395-4a12-8f66-1e8b3b53b6fc") : null,
+                BookingReference = userName.Equals("User") ? Guid.Parse("592fdf9f-2395-4a12-8f66-1e8b3b53b6fc") : null
             };
 
             var result = await userManager.CreateAsync(user, initPw);
@@ -66,14 +68,14 @@ public static class IdentityDataSeed
 
         IdentityResult ir;
 
-        if (!await roleManager.RoleExistsAsync(role))
+        if (!await roleManager!.RoleExistsAsync(role))
         {
             ir = await roleManager.CreateAsync(new(role));
         }
 
         var userManager = serviceProvider.GetService<UserManager<ApplicationUser>>();
 
-        var user = await userManager.FindByIdAsync(uid.ToString());
+        var user = await userManager!.FindByIdAsync(uid.ToString());
 
         if (user is null)
             throw new Exception("User not existing");

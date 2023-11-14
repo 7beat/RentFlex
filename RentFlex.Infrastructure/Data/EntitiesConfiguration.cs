@@ -9,7 +9,6 @@ internal class EstatesConfiguration : IEntityTypeConfiguration<Estate>
     public void Configure(EntityTypeBuilder<Estate> builder)
     {
         builder.HasKey(e => e.Id);
-        //builder.OwnsOne(e => e.Address); // check this
         builder.Property(e => e.EstateType).HasConversion<string>();
         builder.HasMany(e => e.Rentals).WithOne(e => e.Estate).IsRequired(false);
         builder.Property(e => e.ImageUrls)
@@ -26,6 +25,9 @@ internal class EstatesConfiguration : IEntityTypeConfiguration<Estate>
             CostPerDay = 200,
             EstateType = EstateType.Apartment,
             OwnerId = Guid.Parse("6aa43469-b1c8-42b1-aa67-b7240a575f0a"),
+            // For simplicity Preview model has same references for both services
+            BookingReference = Guid.Parse("9d1063e1-125e-45c6-bef3-d5baaa717152"),
+            AirbnbReference = Guid.Parse("9d1063e1-125e-45c6-bef3-d5baaa717152")
         });
 
         builder.OwnsOne(e => e.Address).HasData(new

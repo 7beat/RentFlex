@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using RentFlex.Application.Contracts.Infrastructure.Services;
 using RentFlex.Application.Contracts.Persistence;
 using RentFlex.Domain.entities;
 using System.ComponentModel;
@@ -30,16 +31,24 @@ public record UpsertEstateCommand : IRequest
     public string? PostalCode { get; set; }
     public string? StreetName { get; set; }
     public int? PropertyNumber { get; set; }
+
+    // External
+    [DisplayName("Publish to Airbnb")]
+    public bool PublishAirbnb { get; set; }
+    [DisplayName("Publish to Booking")]
+    public bool PublishBooking { get; set; }
 }
 
 internal class UpsertEstateCommandHandler : IRequestHandler<UpsertEstateCommand>
 {
     private readonly IMapper mapper;
     private readonly IUnitOfWork unitOfWork;
-    public UpsertEstateCommandHandler(IMapper mapper, IUnitOfWork unitOfWork)
+    private readonly IAirbnbService airbnbService;
+    public UpsertEstateCommandHandler(IMapper mapper, IUnitOfWork unitOfWork, IAirbnbService airbnbService)
     {
         this.mapper = mapper;
         this.unitOfWork = unitOfWork;
+        this.airbnbService = airbnbService;
     }
 
     public async Task Handle(UpsertEstateCommand request, CancellationToken cancellationToken)
@@ -49,7 +58,14 @@ internal class UpsertEstateCommandHandler : IRequestHandler<UpsertEstateCommand>
             var estate = mapper.Map<Estate>(request);
             estate.ThumbnailImageUrl = request.ImageUrls.FirstOrDefault();
             estate.ImageUrls = new(request.ImageUrls);
-            await unitOfWork.Estates.AddAsync(estate);
+
+            estate.AirbnbReference = request.PublishAirbnb is false ?
+                null :
+                await airbnbService.CreateEstateAsync(estate);
+
+            // estate.BookingReference = request.PublishBooking is false ? // ToDo: Finish when service is ready
+
+            await unitOfWork.Estates.AddAsync(estate, cancellationToken);
         }
         else
         {
@@ -73,5 +89,16 @@ internal class UpsertEstateCommandHandler : IRequestHandler<UpsertEstateCommand>
         }
 
         await unitOfWork.SaveChangesAsync();
+
+
+#if true // Just for testing
+
+        if (request.PublishAirbnb)
+        {
+            var result = await airbnbService.CreateEstateAsync(new());
+        }
+
+#endif
+
     }
 }
