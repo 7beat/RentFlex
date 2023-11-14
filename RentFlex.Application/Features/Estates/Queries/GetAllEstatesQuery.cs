@@ -19,7 +19,7 @@ internal class GetAllEstatesQueryHandler : IRequestHandler<GetAllEstatesQuery, I
 
     public async Task<IEnumerable<EstateDto>> Handle(GetAllEstatesQuery request, CancellationToken cancellationToken)
     {
-        var estates = await unitOfWork.Estates.FindAllAsync(e => e.OwnerId == request.OwnerId, cancellationToken);
+        var estates = await unitOfWork.Estates.FindAllAsync(e => e.OwnerId == request.OwnerId.ToString(), cancellationToken);
 
         // AuthService will have GetUserRole and on that i will switch: Admin -> GetAll, User -> GetHis
 

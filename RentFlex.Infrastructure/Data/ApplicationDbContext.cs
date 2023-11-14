@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using RentFlex.Domain.entities;
-using RentFlex.Infrastructure.Identity;
+using RentFlex.Domain.Entities;
 using RentFlex.Utility.Converters;
 using System.Reflection;
 

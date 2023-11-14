@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using RentFlex.Infrastructure.Identity;
+using RentFlex.Domain.Entities;
 using System.ComponentModel.DataAnnotations;
 
 namespace RentFlex.Web.Areas.Identity.Pages.Account

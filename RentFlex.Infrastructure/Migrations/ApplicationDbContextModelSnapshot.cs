@@ -155,85 +155,7 @@ namespace RentFlex.Infrastructure.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("RentFlex.Domain.entities.Estate", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("AirbnbReference")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("BookingReference")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<double>("CostPerDay")
-                        .HasColumnType("float");
-
-                    b.Property<string>("EstateType")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ImageUrls")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsAvailable")
-                        .HasColumnType("bit");
-
-                    b.Property<Guid>("OwnerId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("PropertyName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ThumbnailImageUrl")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Estates");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("555daf1f-c760-48d4-9fcf-410cec349f23"),
-                            AirbnbReference = new Guid("9d1063e1-125e-45c6-bef3-d5baaa717152"),
-                            BookingReference = new Guid("9d1063e1-125e-45c6-bef3-d5baaa717152"),
-                            CostPerDay = 200.0,
-                            EstateType = "Apartment",
-                            IsAvailable = true,
-                            OwnerId = new Guid("6aa43469-b1c8-42b1-aa67-b7240a575f0a"),
-                            PropertyName = "TestProperty"
-                        });
-                });
-
-            modelBuilder.Entity("RentFlex.Domain.entities.Rental", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("EndDate")
-                        .HasColumnType("date");
-
-                    b.Property<Guid>("EstateId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("RentType")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("StartDate")
-                        .HasColumnType("date");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("EstateId");
-
-                    b.ToTable("Rentals");
-                });
-
-            modelBuilder.Entity("RentFlex.Infrastructure.Identity.ApplicationUser", b =>
+            modelBuilder.Entity("RentFlex.Domain.Entities.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -315,6 +237,85 @@ namespace RentFlex.Infrastructure.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
+            modelBuilder.Entity("RentFlex.Domain.entities.Estate", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("AirbnbReference")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("BookingReference")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<double>("CostPerDay")
+                        .HasColumnType("float");
+
+                    b.Property<string>("EstateType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ImageUrls")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsAvailable")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("OwnerId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("PropertyName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ThumbnailImageUrl")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OwnerId");
+
+                    b.ToTable("Estates");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("555daf1f-c760-48d4-9fcf-410cec349f23"),
+                            AirbnbReference = new Guid("9d1063e1-125e-45c6-bef3-d5baaa717152"),
+                            BookingReference = new Guid("9d1063e1-125e-45c6-bef3-d5baaa717152"),
+                            CostPerDay = 200.0,
+                            EstateType = "Apartment",
+                            IsAvailable = true,
+                            PropertyName = "TestProperty"
+                        });
+                });
+
+            modelBuilder.Entity("RentFlex.Domain.entities.Rental", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("EndDate")
+                        .HasColumnType("date");
+
+                    b.Property<Guid>("EstateId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("RentType")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("date");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EstateId");
+
+                    b.ToTable("Rentals");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -326,7 +327,7 @@ namespace RentFlex.Infrastructure.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("RentFlex.Infrastructure.Identity.ApplicationUser", null)
+                    b.HasOne("RentFlex.Domain.Entities.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -335,7 +336,7 @@ namespace RentFlex.Infrastructure.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("RentFlex.Infrastructure.Identity.ApplicationUser", null)
+                    b.HasOne("RentFlex.Domain.Entities.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -350,7 +351,7 @@ namespace RentFlex.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("RentFlex.Infrastructure.Identity.ApplicationUser", null)
+                    b.HasOne("RentFlex.Domain.Entities.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -359,7 +360,7 @@ namespace RentFlex.Infrastructure.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("RentFlex.Infrastructure.Identity.ApplicationUser", null)
+                    b.HasOne("RentFlex.Domain.Entities.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -368,6 +369,10 @@ namespace RentFlex.Infrastructure.Migrations
 
             modelBuilder.Entity("RentFlex.Domain.entities.Estate", b =>
                 {
+                    b.HasOne("RentFlex.Domain.Entities.ApplicationUser", "ApplicationUser")
+                        .WithMany("Estates")
+                        .HasForeignKey("OwnerId");
+
                     b.OwnsOne("RentFlex.Domain.entities.Address", "Address", b1 =>
                         {
                             b1.Property<Guid>("EstateId")
@@ -413,6 +418,8 @@ namespace RentFlex.Infrastructure.Migrations
 
                     b.Navigation("Address")
                         .IsRequired();
+
+                    b.Navigation("ApplicationUser");
                 });
 
             modelBuilder.Entity("RentFlex.Domain.entities.Rental", b =>
@@ -422,6 +429,11 @@ namespace RentFlex.Infrastructure.Migrations
                         .HasForeignKey("EstateId");
 
                     b.Navigation("Estate");
+                });
+
+            modelBuilder.Entity("RentFlex.Domain.Entities.ApplicationUser", b =>
+                {
+                    b.Navigation("Estates");
                 });
 
             modelBuilder.Entity("RentFlex.Domain.entities.Estate", b =>
