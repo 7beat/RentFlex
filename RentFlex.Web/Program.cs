@@ -14,6 +14,8 @@ var app = builder.Build();
 await app.SeedIdentityAsync();
 
 WireMockService.Start();
+WireMockService.ConfigureEndpoints("592fdf9f-2395-4a12-8f66-1e8b3b53b6fc", "9d1063e1-125e-45c6-bef3-d5baaa717152");
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
