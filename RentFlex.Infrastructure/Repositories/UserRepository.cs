@@ -14,9 +14,9 @@ public class UserRepository : IUserRepository
     }
 
     public async Task<IEnumerable<ApplicationUser>> FindAllAsync(CancellationToken cancellationToken = default) =>
-        await _dbContext.Set<ApplicationUser>().ToListAsync(cancellationToken);
+        await _dbContext.Set<ApplicationUser>().Include(u => u.Estates).ToListAsync(cancellationToken);
 
     public async Task<ApplicationUser?> FindSingleAsync(Expression<Func<ApplicationUser, bool>> predicate, CancellationToken cancellationToken = default) =>
-        await _dbContext.Set<ApplicationUser>().FirstOrDefaultAsync(predicate, cancellationToken);
+        await _dbContext.Set<ApplicationUser>().Include(u => u.Estates).FirstOrDefaultAsync(predicate, cancellationToken);
 
 }
