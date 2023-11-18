@@ -59,12 +59,6 @@ internal class UpsertEstateCommandHandler : IRequestHandler<UpsertEstateCommand>
             estate.ThumbnailImageUrl = request.ImageUrls.FirstOrDefault();
             estate.ImageUrls = new(request.ImageUrls);
 
-            estate.AirbnbReference = request.PublishAirbnb is false ?
-                null :
-                await airbnbService.CreateEstateAsync(estate);
-
-            // estate.BookingReference = request.PublishBooking is false ? // ToDo: Finish when service is ready
-
             var user = await unitOfWork.Users.FindSingleAsync(u => u.Id == request.OwnerId.ToString(), cancellationToken) ??
                 throw new Exception("User with given Id was not found!");
 
@@ -72,6 +66,11 @@ internal class UpsertEstateCommandHandler : IRequestHandler<UpsertEstateCommand>
             user.Estates.Add(estate);
             //(user.Estates ??= new List<Estate>()).Add(estate);
 
+            estate.AirbnbReference = request.PublishAirbnb is false ?
+                null :
+                await airbnbService.CreateEstateAsync(user.AirbnbReference ?? throw new Exception("Airbnb Reference is missing"), estate);
+
+            // estate.BookingReference = request.PublishBooking is false ? // ToDo: Finish when service is ready
         }
         else
         {
@@ -101,7 +100,7 @@ internal class UpsertEstateCommandHandler : IRequestHandler<UpsertEstateCommand>
 
         if (request.PublishAirbnb)
         {
-            var result = await airbnbService.CreateEstateAsync(new());
+            //var result = await airbnbService.CreateEstateAsync(new());
         }
 
 #endif
