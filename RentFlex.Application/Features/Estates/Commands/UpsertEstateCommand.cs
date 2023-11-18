@@ -66,9 +66,9 @@ internal class UpsertEstateCommandHandler : IRequestHandler<UpsertEstateCommand>
             user.Estates.Add(estate);
             //(user.Estates ??= new List<Estate>()).Add(estate);
 
-            estate.AirbnbReference = request.PublishAirbnb is false ?
+            estate.AirbnbReference = !request.PublishAirbnb || user.AirbnbReference is null ?
                 null :
-                await airbnbService.CreateEstateAsync(user.AirbnbReference ?? throw new Exception("Airbnb Reference is missing"), estate);
+                await airbnbService.CreateEstateAsync(user.AirbnbReference!.Value, estate);
 
             // estate.BookingReference = request.PublishBooking is false ? // ToDo: Finish when service is ready
         }
