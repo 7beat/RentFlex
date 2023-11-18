@@ -65,7 +65,13 @@ internal class UpsertEstateCommandHandler : IRequestHandler<UpsertEstateCommand>
 
             // estate.BookingReference = request.PublishBooking is false ? // ToDo: Finish when service is ready
 
-            await unitOfWork.Estates.AddAsync(estate, cancellationToken);
+            var user = await unitOfWork.Users.FindSingleAsync(u => u.Id == request.OwnerId.ToString(), cancellationToken) ??
+                throw new Exception("User with given Id was not found!");
+
+            user.Estates ??= new List<Estate>();
+            user.Estates.Add(estate);
+            //(user.Estates ??= new List<Estate>()).Add(estate);
+
         }
         else
         {
