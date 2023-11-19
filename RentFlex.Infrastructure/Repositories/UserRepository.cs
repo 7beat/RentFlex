@@ -19,4 +19,7 @@ public class UserRepository : IUserRepository
     public async Task<ApplicationUser?> FindSingleAsync(Expression<Func<ApplicationUser, bool>> predicate, CancellationToken cancellationToken = default) =>
         await _dbContext.Set<ApplicationUser>().Include(u => u.Estates).FirstOrDefaultAsync(predicate, cancellationToken);
 
+    public async Task<int> CountAsync(CancellationToken cancellationToken = default) =>
+        await _dbContext.Set<ApplicationUser>().CountAsync(cancellationToken);
+
 }
