@@ -5,8 +5,8 @@ using Microsoft.Extensions.DependencyInjection;
 using RentFlex.Application.Contracts.Identity;
 using RentFlex.Application.Contracts.Infrastructure.Services;
 using RentFlex.Application.Contracts.Persistence;
+using RentFlex.Domain.Entities;
 using RentFlex.Infrastructure.Data;
-using RentFlex.Infrastructure.Identity;
 using RentFlex.Infrastructure.Repositories;
 using RentFlex.Infrastructure.Services;
 

@@ -9,4 +9,5 @@ public interface IGenericRepository<TEntity> where TEntity : EntityBase
     Task<IEnumerable<TEntity>> FindAllAsync(CancellationToken cancellationToken = default);
     Task<IEnumerable<TEntity>> FindAllAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default);
     void Remove(TEntity entity);
+    Task<int> CountAsync(CancellationToken cancellationToken = default);
 }

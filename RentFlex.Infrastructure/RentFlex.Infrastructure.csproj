@@ -24,4 +24,8 @@
     <ProjectReference Include="..\RentFlex.Utility\RentFlex.Utility.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Migrations\" />
+  </ItemGroup>
+
 </Project>

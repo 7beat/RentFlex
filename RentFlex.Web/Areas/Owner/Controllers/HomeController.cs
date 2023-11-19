@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using RentFlex.Application.Features.Home.Queries;
 using RentFlex.Web.Models;
 using System.Diagnostics;
 
@@ -26,7 +27,9 @@ public class HomeController : Controller
             return RedirectToAction(nameof(Index), "Estate");
         }
 
-        return View();
+        var applicationStats = await _mediator.Send(new GetApplicationStatsQuery());
+
+        return View(applicationStats);
     }
 
     public IActionResult Privacy()

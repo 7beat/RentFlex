@@ -2,8 +2,8 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using RentFlex.Domain.Entities;
 using RentFlex.Infrastructure.Data;
-using RentFlex.Infrastructure.Identity;
 
 namespace CarRental.Infrastructure.Extensions;
 public static class IdentityDataSeed

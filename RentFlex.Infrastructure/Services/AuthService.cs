@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using RentFlex.Application.Contracts.Identity;
-using RentFlex.Infrastructure.Identity;
+using RentFlex.Domain.Entities;
 
 namespace RentFlex.Infrastructure.Services;
 public class AuthService : IAuthService

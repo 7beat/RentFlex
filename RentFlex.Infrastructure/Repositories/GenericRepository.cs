@@ -53,4 +53,7 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
 
         return properties;
     }
+
+    public async Task<int> CountAsync(CancellationToken cancellationToken = default) =>
+        await dbSet.CountAsync(cancellationToken);
 }

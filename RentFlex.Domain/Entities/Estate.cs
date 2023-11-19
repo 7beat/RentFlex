@@ -1,4 +1,5 @@
 ﻿using RentFlex.Domain.common;
+using RentFlex.Domain.Entities;
 
 namespace RentFlex.Domain.entities;
 public class Estate : EntityBase
@@ -15,7 +16,8 @@ public class Estate : EntityBase
     public Guid? AirbnbReference { get; set; }
 
     public ICollection<Rental> Rentals { get; set; } = default!;
-    public Guid OwnerId { get; set; }
+    public string? UserId { get; set; }
+    public ApplicationUser? ApplicationUser { get; set; } = default!;
 }
 
 // Owned

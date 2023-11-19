@@ -11,6 +11,7 @@ internal class EstatesConfiguration : IEntityTypeConfiguration<Estate>
         builder.HasKey(e => e.Id);
         builder.Property(e => e.EstateType).HasConversion<string>();
         builder.HasMany(e => e.Rentals).WithOne(e => e.Estate).IsRequired(false);
+        builder.HasOne(e => e.ApplicationUser).WithMany(u => u.Estates).HasForeignKey(e => e.UserId);
         builder.Property(e => e.ImageUrls)
             .HasConversion(
             x => JsonConvert.SerializeObject(x),
@@ -24,7 +25,7 @@ internal class EstatesConfiguration : IEntityTypeConfiguration<Estate>
             IsAvailable = true,
             CostPerDay = 200,
             EstateType = EstateType.Apartment,
-            OwnerId = Guid.Parse("6aa43469-b1c8-42b1-aa67-b7240a575f0a"),
+            //OwnerId = "6aa43469-b1c8-42b1-aa67-b7240a575f0a",
             // For simplicity Preview model has same references for both services
             BookingReference = Guid.Parse("9d1063e1-125e-45c6-bef3-d5baaa717152"),
             AirbnbReference = Guid.Parse("9d1063e1-125e-45c6-bef3-d5baaa717152")

@@ -75,7 +75,7 @@ public class AirbnbService : IAirbnbService
         return estates;
     }
 
-    public async Task<Guid> CreateEstateAsync(Estate estate)
+    public async Task<Guid> CreateEstateAsync(Guid userReference, Estate estate)
     {
         Guid guid = new();
 
@@ -83,7 +83,7 @@ public class AirbnbService : IAirbnbService
         {
             await circutBreakerPolicy.ExecuteAsync(async () =>
             {
-                var apiResponse = await httpClient.PostAsync($"/airbnb/88e3ffd5-0de9-487b-a053-da87bcca62cf/estates",
+                var apiResponse = await httpClient.PostAsync($"/airbnb/{userReference}/estates",
                     new StringContent(JsonConvert.SerializeObject(estate), Encoding.UTF8, "application/json"));
 
                 var response = await apiResponse.Content.ReadAsStringAsync();

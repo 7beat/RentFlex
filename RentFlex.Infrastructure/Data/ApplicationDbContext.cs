@@ -1,17 +1,19 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using RentFlex.Domain.entities;
-using RentFlex.Infrastructure.Identity;
+using RentFlex.Domain.Entities;
 using RentFlex.Utility.Converters;
 using System.Reflection;
 
 namespace RentFlex.Infrastructure.Data;
-public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
+public class ApplicationDbContext : IdentityDbContext
 {
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
     : base(options)
     {
     }
+
+    public DbSet<ApplicationUser> ApplicationUsers { get; set; }
 
     public DbSet<Estate> Estates { get; set; }
     public DbSet<Rental> Rentals { get; set; }
