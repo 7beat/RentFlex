@@ -42,3 +42,23 @@ internal class EstatesConfiguration : IEntityTypeConfiguration<Estate>
         });
     }
 }
+
+internal class RentalsConfiguration : IEntityTypeConfiguration<Rental>
+{
+    public void Configure(EntityTypeBuilder<Rental> builder)
+    {
+        builder.HasKey(r => r.Id);
+
+        builder.Property(r => r.RentType)
+            .HasConversion<string>();
+
+        builder.HasData(new Rental()
+        {
+            Id = Guid.NewGuid(),
+            EstateId = Guid.Parse("555daf1f-c760-48d4-9fcf-410cec349f23"),
+            RentType = RentType.ShortTerm,
+            StartDate = DateOnly.FromDateTime(DateTime.Today),
+            EndDate = DateOnly.FromDateTime(DateTime.Today.AddDays(3)),
+        });
+    }
+}
