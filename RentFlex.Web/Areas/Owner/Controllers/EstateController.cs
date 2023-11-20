@@ -72,11 +72,10 @@ public class EstateController : Controller
     [HttpDelete]
     public async Task<IActionResult> Delete(Guid id)
     {
-        await _mediator.Send(new DeleteEstateCommand(id));
+        var result = await _mediator.Send(new DeleteEstateCommand(id));
 
-        TempData["success"] = "Estate deleted successfully!!";
+        TempData[result ? "success" : "error"] = result ? "Estate Deleted Sussefully" : "Failed to Delete Estate";
         return Json(new { success = true });
-        //return Json(new { success = true, message = $"Estate deleted successfully!" });
     }
 
     private IEnumerable<string> PersistImages(List<IFormFile> images)
