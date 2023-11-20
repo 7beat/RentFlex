@@ -5,5 +5,6 @@ public interface IUnitOfWork
 {
     IEstateRepository Estates { get; }
     IUserRepository Users { get; }
+    IRentalRepository Rentals { get; }
     Task<bool> SaveChangesAsync(CancellationToken cancellationToken = default!);
 }
