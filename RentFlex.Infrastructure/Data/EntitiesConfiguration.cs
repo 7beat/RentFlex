@@ -52,6 +52,9 @@ internal class RentalsConfiguration : IEntityTypeConfiguration<Rental>
         builder.Property(r => r.RentType)
             .HasConversion<string>();
 
+        builder.Navigation(r => r.Estate)
+            .AutoInclude();
+
         builder.HasData(new Rental()
         {
             Id = Guid.NewGuid(),
