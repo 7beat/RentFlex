@@ -10,9 +10,11 @@ public class UnitOfWork : IUnitOfWork
 
     private IEstateRepository _estateRepository;
     private IUserRepository _userRepository;
+    private IRentalRepository _rentalRepository;
 
     public IEstateRepository Estates => _estateRepository ??= new EstateRepository(dbContext);
     public IUserRepository Users => _userRepository ??= new UserRepository(dbContext);
+    public IRentalRepository Rentals => _rentalRepository ??= new RentalRepository(dbContext);
 
     public UnitOfWork(ApplicationDbContext dbContext)
     {
