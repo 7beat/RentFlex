@@ -3,6 +3,7 @@ using Polly;
 using Polly.CircuitBreaker;
 using Polly.Retry;
 using RentFlex.Application.Contracts.Infrastructure.Services;
+using RentFlex.Application.Models;
 using RentFlex.Domain.entities;
 using System.Text;
 
@@ -75,7 +76,7 @@ public class AirbnbService : IAirbnbService
         return estates;
     }
 
-    public async Task<Guid> CreateEstateAsync(Guid userReference, Estate estate)
+    public async Task<Guid> CreateEstateAsync(Guid userReference, EstateDto estate)
     {
         Guid guid = new();
 
@@ -103,7 +104,7 @@ public class AirbnbService : IAirbnbService
         return guid;
     }
 
-    public async Task<bool> UpdateEstateAsync(Guid airbnbReference, Estate estate)
+    public async Task<bool> UpdateEstateAsync(Guid airbnbReference, EstateDto estate)
     {
         bool result = false;
 

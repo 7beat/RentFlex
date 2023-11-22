@@ -3,6 +3,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using RentFlex.Application.Contracts.Infrastructure.Services;
 using RentFlex.Application.Contracts.Persistence;
+using RentFlex.Application.Models;
 using RentFlex.Domain.entities;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
@@ -53,14 +54,14 @@ internal class UpsertEstateCommandHandler : IRequestHandler<UpsertEstateCommand>
 
     public async Task Handle(UpsertEstateCommand request, CancellationToken cancellationToken)
     {
+        var user = await unitOfWork.Users.FindSingleAsync(u => u.Id == request.OwnerId.ToString(), cancellationToken) ??
+            throw new Exception("User with given Id was not found!");
+
         if (request.Id is null)
         {
             var estate = mapper.Map<Estate>(request);
             estate.ThumbnailImageUrl = request.ImageUrls.FirstOrDefault();
             estate.ImageUrls = new(request.ImageUrls);
-
-            var user = await unitOfWork.Users.FindSingleAsync(u => u.Id == request.OwnerId.ToString(), cancellationToken) ??
-                throw new Exception("User with given Id was not found!");
 
             user.Estates ??= new List<Estate>();
             user.Estates.Add(estate);
@@ -68,13 +69,14 @@ internal class UpsertEstateCommandHandler : IRequestHandler<UpsertEstateCommand>
 
             estate.AirbnbReference = !request.PublishAirbnb || user.AirbnbReference is null ?
                 null :
-                await airbnbService.CreateEstateAsync(user.AirbnbReference!.Value, estate);
+                await airbnbService.CreateEstateAsync(user.AirbnbReference!.Value, mapper.Map<EstateDto>(estate));
 
             // estate.BookingReference = request.PublishBooking is false ? // ToDo: Finish when service is ready
         }
         else
         {
-            var estateDb = await unitOfWork.Estates.FindSingleAsync(e => e.Id == request.Id, cancellationToken);
+            var estateDb = user.Estates.FirstOrDefault(e => e.Id == request.Id);
+
             mapper.Map(request, estateDb);
             if (request.ImageUrls is not null)
             {
@@ -85,10 +87,14 @@ internal class UpsertEstateCommandHandler : IRequestHandler<UpsertEstateCommand>
                 estateDb.ImageUrls = new List<string>(newImages);
             }
 
-            if (estateDb.ImageUrls[request.ThumbnailImage] != estateDb.ThumbnailImageUrl)
+            if (estateDb!.ImageUrls[request.ThumbnailImage] != estateDb.ThumbnailImageUrl)
             {
                 estateDb.ThumbnailImageUrl = estateDb.ImageUrls[request.ThumbnailImage];
             }
+
+            estateDb.AirbnbReference = !request.PublishAirbnb || user.AirbnbReference is null ?
+                null :
+                await airbnbService.CreateEstateAsync(user.AirbnbReference!.Value, mapper.Map<EstateDto>(estateDb));
 
             unitOfWork.Estates.Update(estateDb);
         }
