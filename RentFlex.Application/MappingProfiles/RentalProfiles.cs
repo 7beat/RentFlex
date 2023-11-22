@@ -8,7 +8,7 @@ internal class RentalProfiles : Profile
     public RentalProfiles()
     {
         CreateMap<Rental, RentalDto>()
-            .ForMember(dest => dest.EstateName, opt => opt.MapFrom(src => src.Estate.PropertyName))
+            .ForMember(dest => dest.PropertyName, opt => opt.MapFrom(src => src.Estate.PropertyName))
             .ReverseMap();
     }
 }

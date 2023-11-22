@@ -148,4 +148,30 @@ public class AirbnbService : IAirbnbService
 
         return result;
     }
+
+    public async Task<IEnumerable<RentalDto>> GetAllRentals(Guid userReference, Guid estateReference)
+    {
+        List<RentalDto> rentals = new();
+        try
+        {
+            await retryPolicy.ExecuteAsync(async () =>
+            {
+                var apiResponse = await httpClient.GetAsync($"/airbnb/{userReference}/estates/{estateReference}/rentals");
+                var response = await apiResponse.Content.ReadAsStringAsync();
+                Console.WriteLine(response);
+
+                if (!string.IsNullOrEmpty(response))
+                {
+                    rentals = JsonConvert.DeserializeObject<List<RentalDto>>(response)!;
+                }
+            });
+        }
+        catch (Exception ex)
+        {
+            await Console.Out.WriteLineAsync(ex.Message);
+            throw;
+        }
+
+        return rentals;
+    }
 }

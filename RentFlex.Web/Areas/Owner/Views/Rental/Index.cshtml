@@ -22,6 +22,9 @@
                         <div class="card-body">
                             <h5 class="card-title">Rental Information</h5>
                             <dl class="row">
+                                <dt class="col-sm-4">Property Name:</dt>
+                                <dd class="col-sm-8">@rental.PropertyName</dd>
+
                                 <dt class="col-sm-4">Start Date:</dt>
                                 <dd class="col-sm-8">@rental.StartDate.ToShortDateString()</dd>
 
@@ -31,8 +34,6 @@
                                 <dt class="col-sm-4">Rent Type:</dt>
                                 <dd class="col-sm-8">@rental.RentType</dd>
 
-                                <dt class="col-sm-4">Estate Name:</dt>
-                                <dd class="col-sm-8">@rental.EstateName</dd>
                             </dl>
                         </div>
                     </div>

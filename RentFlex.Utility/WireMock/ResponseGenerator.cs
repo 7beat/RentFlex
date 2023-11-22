@@ -104,7 +104,7 @@ internal static class ResponseGenerator
             RentType = RentType.ShortTerm
         };
 
-    public static IEnumerable<RentalResponse> GetAllAirbnbRentalsResponse() // Dynamic
+    public static IEnumerable<RentalResponse> GetAllAirbnbRentalsResponse() // Dynamic Rentals for SeedEntity
     {
         List<RentalResponse> rentalResponses = new List<RentalResponse>();
 
@@ -114,6 +114,7 @@ internal static class ResponseGenerator
             var endDate = startDate.AddDays(7);
             var rental = new RentalResponse()
             {
+                PropertyName = "Real Seed Property Name",
                 EstateId = Guid.NewGuid(),
                 StartDate = startDate,
                 EndDate = endDate,
@@ -124,4 +125,35 @@ internal static class ResponseGenerator
 
         return rentalResponses;
     }
+
+    private static string GeneratePropertyName() =>
+        $"{PropertyDescriptors[Random.Shared.Next(0, 10)]} {PropertyNouns[Random.Shared.Next(0, 10)]}";
+
+    private static string[] PropertyDescriptors =
+    {
+        "Spacious",
+        "Modern",
+        "Rustic",
+        "Luxurious",
+        "Secluded",
+        "Charming",
+        "Scenic",
+        "Cosy",
+        "Sunny",
+        "Tranquil"
+    };
+
+    private static string[] PropertyNouns =
+    {
+        "House",
+        "Villa",
+        "Cottage",
+        "Retreat",
+        "Mansion",
+        "Bungalow",
+        "Chalet",
+        "Lodge",
+        "Estate",
+        "Manor"
+    };
 }
