@@ -18,4 +18,6 @@ public record EstateDto
     public string PostalCode { get; set; } = default!;
     public string StreetName { get; set; } = default!;
     public int PropertyNumber { get; set; }
+
+    public bool PublishedAirbnb { get; set; }
 }
