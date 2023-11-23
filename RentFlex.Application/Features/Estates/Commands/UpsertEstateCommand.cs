@@ -92,9 +92,12 @@ internal class UpsertEstateCommandHandler : IRequestHandler<UpsertEstateCommand>
                 estateDb.ThumbnailImageUrl = estateDb.ImageUrls[request.ThumbnailImage];
             }
 
-            estateDb.AirbnbReference = !request.PublishAirbnb || user.AirbnbReference is null ?
-                null :
-                await airbnbService.CreateEstateAsync(user.AirbnbReference!.Value, mapper.Map<EstateDto>(estateDb));
+            if (request.PublishAirbnb && estateDb.AirbnbReference is null)
+            {
+                estateDb.AirbnbReference = user.AirbnbReference is null ?
+                    null :
+                    await airbnbService.CreateEstateAsync(user.AirbnbReference!.Value, mapper.Map<EstateDto>(estateDb));
+            }
 
             unitOfWork.Estates.Update(estateDb);
         }
