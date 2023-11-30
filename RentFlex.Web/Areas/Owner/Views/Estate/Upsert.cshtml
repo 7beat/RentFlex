@@ -1,9 +1,13 @@
 ﻿@model UpsertEstateVM
+@{
+    var isNewEstate = Model.Estate.Id is null;
+    ViewData["Title"] = isNewEstate ? "Create" : $"Edit {Model.Estate.PropertyName}"; // Experimental
+}
 
 <form method="post" asp-action="Upsert" enctype="multipart/form-data">
     <input asp-for="Estate.Id" hidden />
     <input asp-for="Estate.ThumbnailImage" id="ThumbnailImage" hidden />
-    @if (Model.Estate.Id is not null)
+    @if (!isNewEstate)
     {
         <input asp-for="Estate.Country" hidden />
         <input asp-for="Estate.City" hidden />
@@ -16,9 +20,9 @@
         <div class="col-10">
             <div class="border p-3 mt-4 row align-items-center">
                 <div class="col-8">
-                    <h2 class="text-primary">@(Model.Estate.Id is not null ? "Edit" : "Create") Estate</h2>
+                    <h2 class="text-primary">@(!isNewEstate ? "Edit" : "Create") Estate</h2>
                 </div>
-                @if (Model.Estate.Id is not null)
+                @if (!isNewEstate)
                 {
                     <div class="col-4 d-flex justify-content-end">
                         <a onClick=Delete('/Owner/Estate/Delete/@Model.Estate.Id')
@@ -113,14 +117,11 @@
                         <input asp-for="Estate.PropertyNumber" class="form-control" />
                         <span asp-validation-for="Estate.PropertyNumber" class="text-danger"></span>
                     </div>
-
                 }
-
                 <div class="mb-3">
                     <label asp-for="Estate.PublishBooking"></label>
                     <input asp-for="Estate.PublishBooking" type="checkbox" />
                 </div>
-
                 <div class="mb-3">
                     @if (Model.Estate.PublishAirbnb is false)
                     {
@@ -131,10 +132,8 @@
                     {
                         <label asp-for="Estate.PublishAirbnb"></label>
                         <input asp-for="Estate.PublishAirbnb" type="checkbox" checked disabled />
-                        @* <input type="hidden" name="Estate.PublishAirbnb" value="true" /> *@
                     }
                 </div>
-
                 <div class="col-12">
                     @if (Model.Estate.Id is not null)
                     {
@@ -159,7 +158,6 @@
         <partial name="_ValidationScriptsPartial" />
     }
     <script src="~/js/tinymce.js"></script>
-    @* <script src="~/js/upsertEstateImages.js"></script> *@
 
     <script>
         // SweetAlerts setup
@@ -203,12 +201,10 @@
                 }
             })
         }
-
         
         function setThumbnail(index) {
             document.getElementById('ThumbnailImage').value = index;
         }
-    
 
     </script>
 }
