@@ -39,13 +39,26 @@
                     <span asp-validation-for="Estate.Description" class="text-danger"></span>
                 </div> *@
 
-                <div class="mb-3 col-6">
-                    <label asp-for="Estate.EstateType"></label>
-                    <select asp-for="Estate.EstateType" asp-items="@Model.EstateType" class="form-select">
-                        <option disabled selected>--Select Estate Type--</option>
-                    </select>
-                    <span asp-validation-for="Estate.EstateType" class="text-danger"></span>
-                </div>
+                @if (Model.Estate.Id is not null)
+                {
+                    <div class="mb-3 col-6">
+                        <label asp-for="Estate.EstateType"></label>
+                        <select asp-for="Estate.EstateType" asp-items="@Model.EstateType" class="form-select" disabled>
+                            <option disabled selected>--Select Estate Type--</option>
+                        </select>
+                        <span asp-validation-for="Estate.EstateType" class="text-danger"></span>
+                    </div>
+                }
+                else
+                {
+                    <div class="mb-3 col-6">
+                        <label asp-for="Estate.EstateType"></label>
+                        <select asp-for="Estate.EstateType" asp-items="@Model.EstateType" class="form-select">
+                            <option disabled selected>--Select Estate Type--</option>
+                        </select>
+                        <span asp-validation-for="Estate.EstateType" class="text-danger"></span>
+                    </div>
+                }
                 <div class="mb-3 col-6">
                     <label asp-for="Estate.CostPerDay"></label>
                     <input asp-for="Estate.CostPerDay" class="form-control" />
