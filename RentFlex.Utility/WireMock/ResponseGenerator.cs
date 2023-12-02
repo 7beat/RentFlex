@@ -114,7 +114,7 @@ internal static class ResponseGenerator
             var endDate = startDate.AddDays(7);
             var rental = new RentalResponse()
             {
-                PropertyName = "Real Seed Property Name",
+                PropertyName = "Cosy Retreat",
                 EstateId = Guid.NewGuid(),
                 StartDate = startDate,
                 EndDate = endDate,
