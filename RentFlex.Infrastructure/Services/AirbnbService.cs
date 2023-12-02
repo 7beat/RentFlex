@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using Polly;
 using Polly.CircuitBreaker;
 using Polly.Retry;
@@ -14,10 +15,12 @@ public class AirbnbService : IAirbnbService
     private static AsyncRetryPolicy retryPolicy;
 
     private readonly HttpClient httpClient;
+    private readonly ILogger<AirbnbService> logger;
 
-    public AirbnbService(IHttpClientFactory httpClientFactory)
+    public AirbnbService(IHttpClientFactory httpClientFactory, ILogger<AirbnbService> logger)
     {
         httpClient = httpClientFactory.CreateClient("WireMockClient");
+        this.logger = logger;
 
         retryPolicy = Policy
             .Handle<Exception>()
@@ -69,7 +72,7 @@ public class AirbnbService : IAirbnbService
         }
         catch (Exception ex)
         {
-            await Console.Out.WriteLineAsync(ex.Message);
+            logger.LogError(ex, "Error while fetching all Estates from Airbnb");
             throw;
         }
 
@@ -97,7 +100,7 @@ public class AirbnbService : IAirbnbService
         }
         catch (Exception ex)
         {
-            await Console.Out.WriteLineAsync(ex.Message);
+            logger.LogError(ex, "Error while Creating Estate for Airbnb");
             throw;
         }
 
@@ -120,7 +123,7 @@ public class AirbnbService : IAirbnbService
         }
         catch (Exception ex)
         {
-            await Console.Out.WriteLineAsync(ex.Message);
+            logger.LogError(ex, "Error while updating Estate from Airbnb");
             throw;
         }
 
@@ -142,7 +145,7 @@ public class AirbnbService : IAirbnbService
         }
         catch (Exception ex)
         {
-            await Console.Out.WriteLineAsync(ex.Message);
+            logger.LogError(ex, "Error while deleting Estate from Airbnb");
             throw;
         }
 
@@ -158,7 +161,6 @@ public class AirbnbService : IAirbnbService
             {
                 var apiResponse = await httpClient.GetAsync($"/airbnb/{userReference}/estates/{estateReference}/rentals");
                 var response = await apiResponse.Content.ReadAsStringAsync();
-                Console.WriteLine(response);
 
                 if (!string.IsNullOrEmpty(response))
                 {
@@ -168,7 +170,7 @@ public class AirbnbService : IAirbnbService
         }
         catch (Exception ex)
         {
-            await Console.Out.WriteLineAsync(ex.Message);
+            logger.LogError(ex, "Error while fetching Rentals from Airbnb");
             throw;
         }
 
