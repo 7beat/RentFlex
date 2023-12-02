@@ -15,6 +15,9 @@ public record UpsertEstateCommand : IRequest
     [DisplayName("Property Name")]
     [StringLength(10, MinimumLength = 3, ErrorMessage = "This needs to be minimum {2} and maximum {1} characters long")]
     public string PropertyName { get; set; } = default!;
+    [DataType(DataType.MultilineText)]
+    [StringLength(500, MinimumLength = 3, ErrorMessage = "This needs to be minimum {2} and maximum {1} characters long")]
+    public string Description { get; set; } = default!;
     [DisplayName("Cost Per Day")]
     public double CostPerDay { get; set; }
     [DisplayName("Type of Estate")]

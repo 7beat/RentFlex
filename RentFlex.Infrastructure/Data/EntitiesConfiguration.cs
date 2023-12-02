@@ -21,11 +21,11 @@ internal class EstatesConfiguration : IEntityTypeConfiguration<Estate>
         builder.HasData(new Estate()
         {
             Id = Guid.Parse("555daf1f-c760-48d4-9fcf-410cec349f23"),
-            PropertyName = "TestProperty",
+            PropertyName = "Cosy Retreat",
+            Description = "Serene, Elegant, Nature-Inspired Haven. Perfect for couples and families.",
             IsAvailable = true,
             CostPerDay = 200,
             EstateType = EstateType.Apartment,
-            //OwnerId = "6aa43469-b1c8-42b1-aa67-b7240a575f0a",
             // For simplicity Preview model has same references for both services
             BookingReference = Guid.Parse("9d1063e1-125e-45c6-bef3-d5baaa717152"),
             AirbnbReference = Guid.Parse("9d1063e1-125e-45c6-bef3-d5baaa717152")

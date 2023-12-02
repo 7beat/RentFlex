@@ -1,7 +1,7 @@
 ﻿@model UpsertEstateVM
 @{
     var isNewEstate = Model.Estate.Id is null;
-    ViewData["Title"] = isNewEstate ? "Create" : $"Edit {Model.Estate.PropertyName}"; // Experimental
+    ViewData["Title"] = isNewEstate ? "Create" : $"Edit {Model.Estate.PropertyName}";
 }
 
 <form method="post" asp-action="Upsert" enctype="multipart/form-data">
@@ -36,13 +36,11 @@
                     <input asp-for="Estate.PropertyName" class="form-control" />
                     <span asp-validation-for="Estate.PropertyName" class="text-danger"></span>
                 </div>
-
-@*                 <div class="mb-3">
-                    <label asp-for="Estate.Description"></label>
-                    <textarea asp-for="Estate.Description" rows="3" class="form-control"></textarea>
-                    <span asp-validation-for="Estate.Description" class="text-danger"></span>
-                </div> *@
-
+                <div class="mb-3">
+                    @Html.LabelFor(m => m.Estate.Description)
+                    @Html.TextAreaFor(m => m.Estate.Description, new { rows = "10" })
+                    @Html.ValidationMessageFor(m => m.Estate.Description, null, new { @class = "text-danger" })
+                </div>
                 @if (Model.Estate.Id is not null)
                 {
                     <div class="mb-3 col-6">
@@ -72,8 +70,6 @@
                     <label asp-for="Estate.ImageUrls"></label>
                     <input id="uploadBox" type="file" name="estateImages" class="form-control" multiple accept="image/*" onchange="displaySelectedFiles(event)" />
                 </div>
-                @* <div id="imagePreview"></div> // Old*@
-
                 <div id="imagePreview" class="d-flex flex-wrap">
                     @if (Model.Estate.Id is not null)
                     {

@@ -5,6 +5,7 @@ public record EstateDto
 {
     public Guid Id { get; set; }
     public string PropertyName { get; set; } = default!;
+    public string Description { get; set; } = default!;
     public bool IsAvailable { get; set; }
     public double CostPerDay { get; set; }
     public EstateType EstateType { get; set; }
