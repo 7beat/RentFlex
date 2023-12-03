@@ -32,7 +32,7 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
         return await dbSet.Where(predicate).ToListAsync(cancellationToken);
     }
 
-    public async Task<TEntity> FindSingleAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default)
+    public async Task<TEntity?> FindSingleAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default)
     {
         return await dbSet.SingleOrDefaultAsync(predicate, cancellationToken);
     }
@@ -41,6 +41,9 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
     {
         dbSet.Remove(entity);
     }
+
+    public async Task<int> CountAsync(CancellationToken cancellationToken = default) =>
+        await dbSet.CountAsync(cancellationToken);
 
     private static ICollection<string> GetIncludeablePropertyNames()
     {
@@ -53,7 +56,4 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
 
         return properties;
     }
-
-    public async Task<int> CountAsync(CancellationToken cancellationToken = default) =>
-        await dbSet.CountAsync(cancellationToken);
 }

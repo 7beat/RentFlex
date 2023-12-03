@@ -9,6 +9,7 @@ using RentFlex.Domain.Entities;
 using RentFlex.Infrastructure.Data;
 using RentFlex.Infrastructure.Repositories;
 using RentFlex.Infrastructure.Services;
+using RentFlex.Utility.WireMock;
 
 namespace RentFlex.Infrastructure;
 public static class InfrastructureServicesRegistration
@@ -24,6 +25,9 @@ public static class InfrastructureServicesRegistration
         {
             client.BaseAddress = new Uri("http://localhost:5000");
         });
+
+        WireMockService.Start();
+        WireMockService.ConfigureEndpoints("592fdf9f-2395-4a12-8f66-1e8b3b53b6fc", "9d1063e1-125e-45c6-bef3-d5baaa717152");
     }
 
     private static void ConfigureDbContext(this IServiceCollection services, IConfiguration configuration)

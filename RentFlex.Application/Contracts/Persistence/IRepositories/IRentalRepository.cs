@@ -1,7 +1,7 @@
 ﻿using RentFlex.Domain.entities;
 
 namespace RentFlex.Application.Contracts.Persistence.IRepositories;
-public interface IEstateRepository : IGenericRepository<Estate>
+public interface IRentalRepository : IGenericRepository<Rental>
 {
-    void Update(Estate estate);
+    void Update(Rental rental);
 }

@@ -84,5 +84,15 @@ public static class WireMockService
         // DeleteAirbnbEstate
         wireMockServer.Given(Request.Create().WithPath($"/airbnb/{userReference}/estates/{estateReference}").UsingDelete())
             .RespondWith(Response.Create().WithStatusCode(204).WithBody("Estate with Id = 7579550f-a641-457d-ba59-47e31c87dbee was succesfully deleted"));
+
+        //// Rentals Single
+        //var jsonSingleRentalResponse = JsonConvert.SerializeObject(ResponseGenerator.GetSingleAirbnbRentalResponse(), Formatting.Indented);
+        //wireMockServer.Given(Request.Create().WithPath($"/airbnb/{userReference}/estates/{estateReference}/rentals").UsingGet())
+        //    .RespondWith(Response.Create().WithStatusCode(200).WithBody(jsonSingleRentalResponse));
+
+        // Rentals All
+        var jsonAllRentalsResponse = JsonConvert.SerializeObject(ResponseGenerator.GetAllAirbnbRentalsResponse(), Formatting.Indented);
+        wireMockServer.Given(Request.Create().WithPath($"/airbnb/{userReference}/estates/{estateReference}/rentals").UsingGet())
+            .RespondWith(Response.Create().WithStatusCode(200).WithBody(jsonAllRentalsResponse));
     }
 }

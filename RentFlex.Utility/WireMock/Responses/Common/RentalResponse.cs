@@ -5,6 +5,7 @@ public class RentalResponse
     public DateOnly EndDate { get; set; }
     public RentType RentType { get; set; }
     public required Guid EstateId { get; set; }
+    public string PropertyName { get; set; } = default!;
 }
 
 public enum RentType

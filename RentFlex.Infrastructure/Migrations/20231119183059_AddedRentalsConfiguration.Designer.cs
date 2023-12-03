@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RentFlex.Infrastructure.Data;
 
@@ -11,9 +12,11 @@ using RentFlex.Infrastructure.Data;
 namespace RentFlex.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231119183059_AddedRentalsConfiguration")]
+    partial class AddedRentalsConfiguration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -243,10 +246,6 @@ namespace RentFlex.Infrastructure.Migrations
                     b.Property<double>("CostPerDay")
                         .HasColumnType("float");
 
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("EstateType")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -280,10 +279,9 @@ namespace RentFlex.Infrastructure.Migrations
                             AirbnbReference = new Guid("9d1063e1-125e-45c6-bef3-d5baaa717152"),
                             BookingReference = new Guid("9d1063e1-125e-45c6-bef3-d5baaa717152"),
                             CostPerDay = 200.0,
-                            Description = "Serene, Elegant, Nature-Inspired Haven. Perfect for couples and families.",
                             EstateType = "Apartment",
                             IsAvailable = true,
-                            PropertyName = "Cosy Retreat"
+                            PropertyName = "TestProperty"
                         });
                 });
 
@@ -315,11 +313,11 @@ namespace RentFlex.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("77912577-fa49-4ff9-85ff-b8c8dda3855f"),
-                            EndDate = new DateTime(2023, 12, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Id = new Guid("c36678ef-4941-42cc-913f-03e3b0608238"),
+                            EndDate = new DateTime(2023, 11, 22, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EstateId = new Guid("555daf1f-c760-48d4-9fcf-410cec349f23"),
                             RentType = "ShortTerm",
-                            StartDate = new DateTime(2023, 12, 2, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            StartDate = new DateTime(2023, 11, 19, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         });
                 });
 

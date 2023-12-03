@@ -94,4 +94,66 @@ internal static class ResponseGenerator
                 }
             }
         };
+
+    public static RentalResponse GetSingleAirbnbRentalResponse() =>
+        new()
+        {
+            EstateId = Guid.NewGuid(),
+            StartDate = DateOnly.FromDateTime(DateTime.Today.AddDays(1)),
+            EndDate = DateOnly.FromDateTime(DateTime.Today.AddDays(7)),
+            RentType = RentType.ShortTerm
+        };
+
+    public static IEnumerable<RentalResponse> GetAllAirbnbRentalsResponse() // Dynamic Rentals for SeedEntity
+    {
+        List<RentalResponse> rentalResponses = new List<RentalResponse>();
+
+        for (int i = 0; i < 5; i++)
+        {
+            var startDate = DateOnly.FromDateTime(DateTime.Today.AddDays(Random.Shared.Next(0, 60)));
+            var endDate = startDate.AddDays(7);
+            var rental = new RentalResponse()
+            {
+                PropertyName = "Cosy Retreat",
+                EstateId = Guid.NewGuid(),
+                StartDate = startDate,
+                EndDate = endDate,
+                RentType = RentType.ShortTerm
+            };
+            rentalResponses.Add(rental);
+        }
+
+        return rentalResponses;
+    }
+
+    private static string GeneratePropertyName() =>
+        $"{PropertyDescriptors[Random.Shared.Next(0, 10)]} {PropertyNouns[Random.Shared.Next(0, 10)]}";
+
+    private static string[] PropertyDescriptors =
+    {
+        "Spacious",
+        "Modern",
+        "Rustic",
+        "Luxurious",
+        "Secluded",
+        "Charming",
+        "Scenic",
+        "Cosy",
+        "Sunny",
+        "Tranquil"
+    };
+
+    private static string[] PropertyNouns =
+    {
+        "House",
+        "Villa",
+        "Cottage",
+        "Retreat",
+        "Mansion",
+        "Bungalow",
+        "Chalet",
+        "Lodge",
+        "Estate",
+        "Manor"
+    };
 }

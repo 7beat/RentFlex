@@ -13,7 +13,8 @@ internal class EstateProfiles : Profile
             .ForMember(dest => dest.City, opt => opt.MapFrom(src => src.Address.City))
             .ForMember(dest => dest.PostalCode, opt => opt.MapFrom(src => src.Address.PostalCode))
             .ForMember(dest => dest.StreetName, opt => opt.MapFrom(src => src.Address.StreetName))
-            .ForMember(dest => dest.PropertyNumber, opt => opt.MapFrom(src => src.Address.PropertyNumber));
+            .ForMember(dest => dest.PropertyNumber, opt => opt.MapFrom(src => src.Address.PropertyNumber))
+            .ForMember(dest => dest.PublishedAirbnb, opt => opt.MapFrom(src => src.AirbnbReference != null));
 
         CreateMap<UpsertEstateCommand, Estate>()
             .ForMember(dest => dest.Address, opt => opt.MapFrom(src => new Address
@@ -28,7 +29,8 @@ internal class EstateProfiles : Profile
             .ReverseMap();
 
 
-        CreateMap<UpsertEstateCommand, EstateDto>()
+        CreateMap<EstateDto, UpsertEstateCommand>()
+            .ForMember(dest => dest.PublishAirbnb, opt => opt.MapFrom(src => src.PublishedAirbnb))
             .ReverseMap();
     }
 }

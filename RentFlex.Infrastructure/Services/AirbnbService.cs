@@ -1,8 +1,10 @@
-﻿using Newtonsoft.Json;
+﻿using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using Polly;
 using Polly.CircuitBreaker;
 using Polly.Retry;
 using RentFlex.Application.Contracts.Infrastructure.Services;
+using RentFlex.Application.Models;
 using RentFlex.Domain.entities;
 using System.Text;
 
@@ -13,10 +15,12 @@ public class AirbnbService : IAirbnbService
     private static AsyncRetryPolicy retryPolicy;
 
     private readonly HttpClient httpClient;
+    private readonly ILogger<AirbnbService> logger;
 
-    public AirbnbService(IHttpClientFactory httpClientFactory)
+    public AirbnbService(IHttpClientFactory httpClientFactory, ILogger<AirbnbService> logger)
     {
         httpClient = httpClientFactory.CreateClient("WireMockClient");
+        this.logger = logger;
 
         retryPolicy = Policy
             .Handle<Exception>()
@@ -43,7 +47,7 @@ public class AirbnbService : IAirbnbService
         }
         catch (Exception ex) //when (ex.InnerException != null)
         {
-
+            logger.LogInformation(ex, "Error While testing");
             throw;
         }
 
@@ -68,14 +72,14 @@ public class AirbnbService : IAirbnbService
         }
         catch (Exception ex)
         {
-            await Console.Out.WriteLineAsync(ex.Message);
+            logger.LogError(ex, "Error while fetching all Estates from Airbnb");
             throw;
         }
 
         return estates;
     }
 
-    public async Task<Guid> CreateEstateAsync(Guid userReference, Estate estate)
+    public async Task<Guid> CreateEstateAsync(Guid userReference, EstateDto estate)
     {
         Guid guid = new();
 
@@ -96,14 +100,14 @@ public class AirbnbService : IAirbnbService
         }
         catch (Exception ex)
         {
-            await Console.Out.WriteLineAsync(ex.Message);
+            logger.LogError(ex, "Error while Creating Estate for Airbnb");
             throw;
         }
 
         return guid;
     }
 
-    public async Task<bool> UpdateEstateAsync(Guid airbnbReference, Estate estate)
+    public async Task<bool> UpdateEstateAsync(Guid airbnbReference, EstateDto estate)
     {
         bool result = false;
 
@@ -119,7 +123,7 @@ public class AirbnbService : IAirbnbService
         }
         catch (Exception ex)
         {
-            await Console.Out.WriteLineAsync(ex.Message);
+            logger.LogError(ex, "Error while updating Estate from Airbnb");
             throw;
         }
 
@@ -141,10 +145,35 @@ public class AirbnbService : IAirbnbService
         }
         catch (Exception ex)
         {
-            await Console.Out.WriteLineAsync(ex.Message);
+            logger.LogError(ex, "Error while deleting Estate from Airbnb");
             throw;
         }
 
         return result;
+    }
+
+    public async Task<IEnumerable<RentalDto>> GetAllRentals(Guid userReference, Guid estateReference)
+    {
+        List<RentalDto> rentals = new();
+        try
+        {
+            await retryPolicy.ExecuteAsync(async () =>
+            {
+                var apiResponse = await httpClient.GetAsync($"/airbnb/{userReference}/estates/{estateReference}/rentals");
+                var response = await apiResponse.Content.ReadAsStringAsync();
+
+                if (!string.IsNullOrEmpty(response))
+                {
+                    rentals = JsonConvert.DeserializeObject<List<RentalDto>>(response)!;
+                }
+            });
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "Error while fetching Rentals from Airbnb");
+            throw;
+        }
+
+        return rentals;
     }
 }
