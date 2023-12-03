@@ -78,7 +78,7 @@ internal class UpsertEstateCommandHandler : IRequestHandler<UpsertEstateCommand>
         }
         else
         {
-            var estateDb = user.Estates.FirstOrDefault(e => e.Id == request.Id);
+            var estateDb = user.Estates.First(e => e.Id == request.Id);
 
             mapper.Map(request, estateDb);
             if (request.ImageUrls is not null)

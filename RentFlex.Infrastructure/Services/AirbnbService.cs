@@ -47,7 +47,7 @@ public class AirbnbService : IAirbnbService
         }
         catch (Exception ex) //when (ex.InnerException != null)
         {
-
+            logger.LogInformation(ex, "Error While testing");
             throw;
         }
 

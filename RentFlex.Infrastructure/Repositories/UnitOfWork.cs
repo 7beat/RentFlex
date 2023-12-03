@@ -8,9 +8,9 @@ public class UnitOfWork : IUnitOfWork
     private bool _disposed = false;
     private readonly ApplicationDbContext dbContext;
 
-    private IEstateRepository _estateRepository;
-    private IUserRepository _userRepository;
-    private IRentalRepository _rentalRepository;
+    private IEstateRepository? _estateRepository;
+    private IUserRepository? _userRepository;
+    private IRentalRepository? _rentalRepository;
 
     public IEstateRepository Estates => _estateRepository ??= new EstateRepository(dbContext);
     public IUserRepository Users => _userRepository ??= new UserRepository(dbContext);

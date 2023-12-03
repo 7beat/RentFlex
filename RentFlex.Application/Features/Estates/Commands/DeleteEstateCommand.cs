@@ -16,7 +16,7 @@ internal class DeleteEstateCommandHandler : IRequestHandler<DeleteEstateCommand,
     public async Task<bool> Handle(DeleteEstateCommand request, CancellationToken cancellationToken)
     {
         var estate = await unitOfWork.Estates.FindSingleAsync(e => e.Id == request.Id, cancellationToken);
-        unitOfWork.Estates.Remove(estate);
+        unitOfWork.Estates.Remove(estate!);
         return await unitOfWork.SaveChangesAsync(cancellationToken);
     }
 }
