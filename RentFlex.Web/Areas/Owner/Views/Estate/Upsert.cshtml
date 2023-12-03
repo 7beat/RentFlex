@@ -41,7 +41,7 @@
                     @Html.TextAreaFor(m => m.Estate.Description, new { rows = "10" })
                     @Html.ValidationMessageFor(m => m.Estate.Description, null, new { @class = "text-danger" })
                 </div>
-                @if (Model.Estate.Id is not null)
+                @if (!isNewEstate)
                 {
                     <div class="mb-3 col-6">
                         <label asp-for="Estate.EstateType"></label>
@@ -84,7 +84,7 @@
                         }
                     }
                 </div>
-                @if (Model.Estate.Id is null)
+                @if (isNewEstate)
                 {
                     <div class="mb-3 col-3">
                         <label asp-for="Estate.Country"></label>
