@@ -13,7 +13,7 @@ public record UpsertEstateCommand : IRequest
 {
     public Guid? Id { get; set; }
     [DisplayName("Property Name")]
-    [StringLength(10, MinimumLength = 3, ErrorMessage = "This needs to be minimum {2} and maximum {1} characters long")]
+    [StringLength(100, MinimumLength = 3, ErrorMessage = "This needs to be minimum {2} and maximum {1} characters long")]
     public string PropertyName { get; set; } = default!;
     [DataType(DataType.MultilineText)]
     [StringLength(500, MinimumLength = 3, ErrorMessage = "This needs to be minimum {2} and maximum {1} characters long")]
@@ -106,16 +106,5 @@ internal class UpsertEstateCommandHandler : IRequestHandler<UpsertEstateCommand>
         }
 
         await unitOfWork.SaveChangesAsync();
-
-
-#if true // Just for testing
-
-        if (request.PublishAirbnb)
-        {
-            //var result = await airbnbService.CreateEstateAsync(new());
-        }
-
-#endif
-
     }
 }
