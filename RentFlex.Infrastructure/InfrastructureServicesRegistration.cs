@@ -23,7 +23,7 @@ public static class InfrastructureServicesRegistration
 
         services.AddHttpClient("WireMockClient", client =>
         {
-            client.BaseAddress = new Uri("http://localhost:5000");
+            client.BaseAddress = new Uri("http://localhost:8080");
         });
 
         WireMockService.Start();
