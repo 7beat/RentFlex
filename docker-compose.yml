@@ -2,6 +2,8 @@ version: '3.4'
 name: rentflex
 networks:
   rentflex:
+volumes:
+  sqlserver:
 
 services:
   rentflex.web:
@@ -10,14 +12,14 @@ services:
     build:
       context: .
       dockerfile: RentFlex.Web/Dockerfile
-    #environment:
-    #- ASPNETCORE_HTTP_PORTS=8080
-    # - ASPNETCORE_HTTP_PORT=https://+:8080
-    # - ASPNETCORE_URLS=http://+:8080
     ports:
     - "8080"
     #- "8080:81"
     # - "5001:80"
+    volumes:
+    - type: bind
+      source: "./wwwroot/images/estates"
+      target: "/app/wwwroot/images/estates"
     depends_on:
     - rentflex-db
     networks:
@@ -33,3 +35,5 @@ services:
         ACCEPT_EULA: "Y"
     networks:
     - rentflex
+    volumes:
+    - sqlserver:/var/opt/mssql 
