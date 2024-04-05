@@ -1,4 +1,6 @@
 using CarRental.Infrastructure.Extensions;
+using Microsoft.EntityFrameworkCore;
+using RentFlex.Infrastructure.Data;
 using RentFlex.Web.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,8 +16,12 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseMigrationsEndPoint();
+
+    using var scope = app.Services.CreateScope();
+    var scopedServices = scope.ServiceProvider;
+    var dbContext = scopedServices.GetRequiredService<ApplicationDbContext>();
+    await dbContext.Database.MigrateAsync();
     await app.SeedIdentityAsync();
-    // Override connString for development
 }
 else
 {
