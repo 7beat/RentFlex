@@ -13,9 +13,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RentFlex.Application", "Ren
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{19A5EF25-4F02-45D9-8CEF-01966D85182F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RentFlex.Infrastructure", "RentFlex.Infrastructure\RentFlex.Infrastructure.csproj", "{DF52C5B1-A675-4550-899C-2E201E271382}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RentFlex.Infrastructure", "RentFlex.Infrastructure\RentFlex.Infrastructure.csproj", "{DF52C5B1-A675-4550-899C-2E201E271382}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RentFlex.Utility", "RentFlex.Utility\RentFlex.Utility.csproj", "{FDB0C7BF-9E00-4DB5-9422-2FC5ED74B721}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RentFlex.Utility", "RentFlex.Utility\RentFlex.Utility.csproj", "{FDB0C7BF-9E00-4DB5-9422-2FC5ED74B721}"
+EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{2E7F8481-3357-4E93-8180-22C2D54F56C5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -43,6 +45,10 @@ Global
 		{FDB0C7BF-9E00-4DB5-9422-2FC5ED74B721}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FDB0C7BF-9E00-4DB5-9422-2FC5ED74B721}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FDB0C7BF-9E00-4DB5-9422-2FC5ED74B721}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2E7F8481-3357-4E93-8180-22C2D54F56C5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2E7F8481-3357-4E93-8180-22C2D54F56C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2E7F8481-3357-4E93-8180-22C2D54F56C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2E7F8481-3357-4E93-8180-22C2D54F56C5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

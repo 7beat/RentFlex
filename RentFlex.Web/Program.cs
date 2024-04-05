@@ -10,12 +10,12 @@ builder.Services.AddRazorPages();
 
 var app = builder.Build();
 
-await app.SeedIdentityAsync();
-
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseMigrationsEndPoint();
+    await app.SeedIdentityAsync();
+    // Override connString for development
 }
 else
 {

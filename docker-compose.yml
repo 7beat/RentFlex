@@ -1,0 +1,35 @@
+version: '3.4'
+name: rentflex
+networks:
+  rentflex:
+
+services:
+  rentflex.web:
+    container_name: RentFlex.Web
+    image: ${DOCKER_REGISTRY-}rentflexweb
+    build:
+      context: .
+      dockerfile: RentFlex.Web/Dockerfile
+    #environment:
+    #- ASPNETCORE_HTTP_PORTS=8080
+    # - ASPNETCORE_HTTP_PORT=https://+:8080
+    # - ASPNETCORE_URLS=http://+:8080
+    ports:
+    - "8080"
+    #- "8080:81"
+    # - "5001:80"
+    depends_on:
+    - rentflex-db
+    networks:
+    - rentflex
+
+  rentflex-db:
+    container_name: RentFlex-Db
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    ports:
+    - "1433:1433"
+    environment:
+        MSSQL_SA_PASSWORD: Password123!
+        ACCEPT_EULA: "Y"
+    networks:
+    - rentflex
