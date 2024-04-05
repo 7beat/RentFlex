@@ -83,19 +83,19 @@ public class EstateController : Controller
         var imagePaths = new List<string>();
         string wwwRootPath = _webHostEnvironment.WebRootPath;
 
-
         foreach (var file in images)
         {
             string fileName = Guid.NewGuid().ToString();
-            var uploads = Path.Combine(wwwRootPath, @"images\estates");
+            var uploads = Path.Combine(wwwRootPath, "images", "estates");
+
             var extension = Path.GetExtension(file.FileName);
 
-            using (var fileStreams = new FileStream(Path.Combine(uploads, fileName + extension), FileMode.Create))
+            using (var fileStream = new FileStream(Path.Combine(uploads, $"{fileName}{extension}"), FileMode.Create))
             {
-                file.CopyTo(fileStreams);
+                file.CopyTo(fileStream);
             }
 
-            imagePaths.Add(@"\images\estates\" + fileName + extension);
+            imagePaths.Add($"/images/estates/{fileName}{extension}");
         }
 
         return imagePaths;
