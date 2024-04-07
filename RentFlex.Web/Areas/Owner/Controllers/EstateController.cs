@@ -81,7 +81,7 @@ public class EstateController : Controller
     private IEnumerable<string> PersistImages(List<IFormFile> images)
     {
         var imagePaths = new List<string>();
-        string hostImagesPath = Path.Combine(_webHostEnvironment.ContentRootPath, "wwwroot", "images", "estates");
+        string hostImagesPath = Path.Combine(_webHostEnvironment.ContentRootPath, "uploads", "images");
 
         foreach (var file in images)
         {
@@ -95,7 +95,7 @@ public class EstateController : Controller
                 file.CopyTo(fileStream);
             }
 
-            imagePaths.Add($"/images/estates/{fileName}{extension}");
+            imagePaths.Add($"/uploads/images/{fileName}{extension}");
         }
 
         return imagePaths;
