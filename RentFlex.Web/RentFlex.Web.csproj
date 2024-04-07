@@ -10,6 +10,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="uploads\images\02d7d65d-3ba7-4124-b102-dd27d76cb256.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="8.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="8.0.0" />
@@ -27,6 +31,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="uploads\images\" />
     <Folder Include="wwwroot\images\estates\" />
   </ItemGroup>
 
