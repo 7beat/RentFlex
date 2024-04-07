@@ -19,14 +19,16 @@ COPY . .
 WORKDIR "/src/RentFlex.Web"
 RUN dotnet build "./RentFlex.Web.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
-#RUN dotnet tool install --global dotnet-ef
-#RUN dotnet ef database update
-
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
 RUN dotnet publish "./RentFlex.Web.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app
+USER root
+RUN mkdir -p /app/uploads/images \
+    && chown -R app:app /app/uploads/images \
+    && chmod -R 755 /app/uploads/images
+USER app
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "RentFlex.Web.dll"]
