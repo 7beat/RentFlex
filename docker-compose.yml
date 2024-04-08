@@ -13,8 +13,8 @@ services:
     build:
       context: .
       dockerfile: RentFlex.Web/Dockerfile
-    ports:
-    - "8080"
+    # ports:
+    # - "8080:80"
     #- "8080:81"
     # - "5001:80"
     volumes:
