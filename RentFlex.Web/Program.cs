@@ -17,12 +17,13 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseMigrationsEndPoint();
-
+}
+else if (app.Environment.IsStaging())
+{
     using var scope = app.Services.CreateScope();
     var scopedServices = scope.ServiceProvider;
     var dbContext = scopedServices.GetRequiredService<ApplicationDbContext>();
     await dbContext.Database.MigrateAsync();
-    await app.SeedIdentityAsync();
 }
 else
 {
@@ -30,6 +31,8 @@ else
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
+
+await app.SeedIdentityAsync();
 
 app.UseStaticFiles(new StaticFileOptions
 {
