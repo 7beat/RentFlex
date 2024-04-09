@@ -14,7 +14,7 @@ public static class WireMockService
         Console.WriteLine("Starting WireMock server!");
         var settings = new WireMockServerSettings
         {
-            Port = 8080,
+            Port = 5000,
         };
 
         wireMockServer = WireMockServer.Start(settings);

@@ -1,4 +1,7 @@
 using CarRental.Infrastructure.Extensions;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
+using RentFlex.Infrastructure.Data;
 using RentFlex.Web.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,12 +13,17 @@ builder.Services.AddRazorPages();
 
 var app = builder.Build();
 
-await app.SeedIdentityAsync();
-
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseMigrationsEndPoint();
+}
+else if (app.Environment.IsStaging())
+{
+    using var scope = app.Services.CreateScope();
+    var scopedServices = scope.ServiceProvider;
+    var dbContext = scopedServices.GetRequiredService<ApplicationDbContext>();
+    await dbContext.Database.MigrateAsync();
 }
 else
 {
@@ -23,6 +31,15 @@ else
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
+
+await app.SeedIdentityAsync();
+
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(
+        Path.Combine(app.Environment.ContentRootPath, "uploads")),
+    RequestPath = "/uploads"
+});
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
