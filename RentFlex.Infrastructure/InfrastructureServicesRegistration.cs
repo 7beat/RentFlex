@@ -6,6 +6,7 @@ using RentFlex.Application.Contracts.Identity;
 using RentFlex.Application.Contracts.Infrastructure.Services;
 using RentFlex.Application.Contracts.Persistence;
 using RentFlex.Domain.Entities;
+using RentFlex.Infrastructure.BackgroundServices;
 using RentFlex.Infrastructure.Data;
 using RentFlex.Infrastructure.Repositories;
 using RentFlex.Infrastructure.Services;
@@ -23,6 +24,7 @@ public static class InfrastructureServicesRegistration
         services.ConfigureServices();
         services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect(configuration.GetConnectionString("Cache")!));
         services.ConfigureCache(configuration);
+        services.AddHostedService<RedisUpdater>();
 
         services.AddHttpClient("WireMockClient", client =>
         {
