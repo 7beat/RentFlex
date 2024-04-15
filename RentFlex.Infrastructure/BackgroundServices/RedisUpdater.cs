@@ -7,7 +7,7 @@ using RentFlex.Application.Models;
 using StackExchange.Redis;
 
 namespace RentFlex.Infrastructure.BackgroundServices;
-public class RedisUpdater(IConnectionMultiplexer muxer, IServiceScopeFactory _scopeFactory, ILogger<RedisUpdater> logger) : BackgroundService
+public class RedisUpdater(IConnectionMultiplexer muxer, IServiceScopeFactory scopeFactory, ILogger<RedisUpdater> logger) : BackgroundService
 {
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
@@ -17,7 +17,7 @@ public class RedisUpdater(IConnectionMultiplexer muxer, IServiceScopeFactory _sc
             {
                 IDatabase redisDb = muxer.GetDatabase();
 
-                using var scope = _scopeFactory.CreateScope();
+                using var scope = scopeFactory.CreateScope();
 
                 var unitOfWork = scope.ServiceProvider.GetRequiredService<IUnitOfWork>();
 
