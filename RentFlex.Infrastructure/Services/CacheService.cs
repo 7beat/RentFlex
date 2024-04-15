@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using RentFlex.Application.Contracts.Infrastructure.Services;
 using RentFlex.Application.Contracts.Persistence;
 using RentFlex.Application.Models;
@@ -9,29 +10,46 @@ public class CacheService : ICacheService
 {
     private readonly IDatabase redis;
     private readonly IUnitOfWork unitOfWork;
-    public CacheService(IConnectionMultiplexer muxer, IUnitOfWork unitOfWork)
+    private readonly ILogger<CacheService> logger;
+    public CacheService(IConnectionMultiplexer muxer, IUnitOfWork unitOfWork, ILogger<CacheService> logger)
     {
         redis = muxer.GetDatabase();
         this.unitOfWork = unitOfWork;
+        this.logger = logger;
     }
 
     public async Task<ApplicationStatsDto> GetOrCreateAppStatsAsync(CancellationToken cancellationToken)
     {
-        var json = await redis.StringGetAsync("AppStats");
-
-        if (string.IsNullOrEmpty(json))
+        try
         {
-            var appStats = new ApplicationStatsDto(
+            var json = await redis.StringGetAsync("AppStats");
+
+            if (string.IsNullOrEmpty(json))
+            {
+                var appStats = new ApplicationStatsDto(
+                    await unitOfWork.Users.CountAsync(cancellationToken),
+                    await unitOfWork.Estates.CountAsync(cancellationToken));
+
+                json = JsonConvert.SerializeObject(appStats);
+
+                await redis.StringSetAsync("AppStats", json);
+
+                return appStats;
+            }
+            else
+            {
+                return JsonConvert.DeserializeObject<ApplicationStatsDto>(json!)!;
+            }
+        }
+        catch (Exception e)
+        {
+            logger.LogWarning($"Exception occurred while fetching data from Redis, message: {e.Message}");
+        }
+
+        return new ApplicationStatsDto(
                 await unitOfWork.Users.CountAsync(cancellationToken),
                 await unitOfWork.Estates.CountAsync(cancellationToken));
 
-            json = JsonConvert.SerializeObject(appStats);
-
-            await redis.StringSetAsync("AppStats", json);
-        }
-
-        return JsonConvert.DeserializeObject<ApplicationStatsDto>(json!)!;
-        // TryCatchFinally to return serialized object?
     }
 
     //public async Task<T> GetOrCreateAsync<T>(CancellationToken cancellationToken)
