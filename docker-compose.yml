@@ -19,6 +19,7 @@ services:
     - uploads:/app/uploads
     depends_on:
     - rentflex-db
+    - rentflex.cache
     networks:
     - rentflex
     environment:
@@ -44,3 +45,5 @@ services:
     restart: always
     ports:
     - "6379:6379"
+    networks:
+    - rentflex
