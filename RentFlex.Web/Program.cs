@@ -1,7 +1,5 @@
 using CarRental.Infrastructure.Extensions;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
-using RentFlex.Infrastructure.Data;
 using RentFlex.Web.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -20,10 +18,7 @@ if (app.Environment.IsDevelopment())
 }
 else if (app.Environment.IsStaging())
 {
-    using var scope = app.Services.CreateScope();
-    var scopedServices = scope.ServiceProvider;
-    var dbContext = scopedServices.GetRequiredService<ApplicationDbContext>();
-    await dbContext.Database.MigrateAsync();
+    await app.ApplyMigrationsAsync();
 }
 else
 {
