@@ -6,5 +6,6 @@ Rentflex is an innovative ASP.NET MVC project designed to seamlessly synchronize
 * CQRS
 * User seeding with assigned roles
 * Polly for External Services Calls
+* WireMock for simulating External Services
 * Redis Cache
 * Containerized using Docker
