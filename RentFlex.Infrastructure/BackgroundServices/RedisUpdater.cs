@@ -31,7 +31,7 @@ public class RedisUpdater(IConnectionMultiplexer muxer, IServiceScopeFactory sco
 
                 logger.LogInformation($"Redis AppStats updated at: {DateTime.Now}");
 
-                await Task.Delay(TimeSpan.FromMinutes(1), stoppingToken);
+                await Task.Delay(TimeSpan.FromMinutes(15), stoppingToken);
             }
             catch (Exception ex)
             {

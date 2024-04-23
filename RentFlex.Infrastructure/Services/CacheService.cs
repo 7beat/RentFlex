@@ -18,7 +18,7 @@ public class CacheService : ICacheService
         this.logger = logger;
     }
 
-    public async Task<ApplicationStatsDto> GetOrCreateAppStatsAsync(CancellationToken cancellationToken)
+    public async Task<ApplicationStatsDto> GetAppStatsAsync(CancellationToken cancellationToken)
     {
         try
         {
@@ -27,7 +27,7 @@ public class CacheService : ICacheService
         }
         catch (Exception e)
         {
-            logger.LogWarning($"Exception occurred while fetching data from Redis, message: {e.Message}");
+            logger.LogError($"Exception occurred while fetching data from Redis, message: {e.Message}");
         }
 
         return new ApplicationStatsDto(
