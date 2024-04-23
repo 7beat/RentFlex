@@ -19,6 +19,7 @@ services:
     - uploads:/app/uploads
     depends_on:
     - rentflex-db
+    - rentflex.cache
     networks:
     - rentflex
     environment:
@@ -36,4 +37,13 @@ services:
     networks:
     - rentflex
     volumes:
-    - sqlserver:/var/opt/mssql 
+    - sqlserver:/var/opt/mssql
+ 
+  rentflex.cache:
+    container_name: Rentflex-Cache
+    image: redis:latest
+    restart: always
+    ports:
+    - "6379:6379"
+    networks:
+    - rentflex

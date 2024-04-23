@@ -6,7 +6,7 @@ using RentFlex.Domain.Entities;
 using RentFlex.Infrastructure.Data;
 
 namespace CarRental.Infrastructure.Extensions;
-public static class IdentityDataSeed
+public static class ApplicationExtensions
 {
     /// <summary>
     /// Seeds the database with initial <see cref="ApplicationUser"/> and <see cref="IdentityRole"/> instances for IdentityUsers.
@@ -83,6 +83,14 @@ public static class IdentityDataSeed
         ir = await userManager.AddToRoleAsync(user, role);
 
         return ir;
+    }
+
+    public static async Task ApplyMigrationsAsync(this IApplicationBuilder app)
+    {
+        using var scope = app.ApplicationServices.CreateScope();
+        var scopedServices = scope.ServiceProvider;
+        var dbContext = scopedServices.GetRequiredService<ApplicationDbContext>();
+        await dbContext.Database.MigrateAsync();
     }
 
 }

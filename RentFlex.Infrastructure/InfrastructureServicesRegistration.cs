@@ -6,10 +6,12 @@ using RentFlex.Application.Contracts.Identity;
 using RentFlex.Application.Contracts.Infrastructure.Services;
 using RentFlex.Application.Contracts.Persistence;
 using RentFlex.Domain.Entities;
+using RentFlex.Infrastructure.BackgroundServices;
 using RentFlex.Infrastructure.Data;
 using RentFlex.Infrastructure.Repositories;
 using RentFlex.Infrastructure.Services;
 using RentFlex.Utility.WireMock;
+using StackExchange.Redis;
 
 namespace RentFlex.Infrastructure;
 public static class InfrastructureServicesRegistration
@@ -20,6 +22,9 @@ public static class InfrastructureServicesRegistration
         services.ConfigureIdentity();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.ConfigureServices();
+        services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect(configuration.GetConnectionString("Cache")!));
+        services.ConfigureCache(configuration);
+        services.AddHostedService<RedisUpdater>();
 
         services.AddHttpClient("WireMockClient", client =>
         {
@@ -63,5 +68,14 @@ public static class InfrastructureServicesRegistration
     {
         services.AddTransient<IAuthService, AuthService>();
         services.AddScoped<IAirbnbService, AirbnbService>();
+        services.AddScoped<ICacheService, CacheService>();
+    }
+
+    private static void ConfigureCache(this IServiceCollection services, IConfiguration configuration)
+    {
+        services.AddStackExchangeRedisCache(options =>
+        {
+            options.Configuration = configuration.GetConnectionString("Cache");
+        });
     }
 }
