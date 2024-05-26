@@ -1,8 +1,14 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Azure.Identity;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using RentFlex.Application.Contracts.Identity;
+using Microsoft.Graph;
+using Microsoft.Identity.Web;
+using Microsoft.Identity.Web.UI;
 using RentFlex.Application.Contracts.Infrastructure.Services;
 using RentFlex.Application.Contracts.Persistence;
 using RentFlex.Domain.Entities;
@@ -19,12 +25,48 @@ public static class InfrastructureServicesRegistration
     public static void RegisterInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
         services.ConfigureDbContext(configuration);
-        services.ConfigureIdentity();
+        //services.ConfigureIdentity();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.ConfigureServices();
         services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect(configuration.GetConnectionString("Cache")!));
         services.ConfigureCache(configuration);
         services.AddHostedService<RedisUpdater>();
+
+        // AzureAD Identity
+        services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
+            .AddMicrosoftIdentityWebApp(configuration);
+
+        services.AddSingleton<GraphServiceClient>(sp =>
+        {
+            var tenantId = configuration["AzureAd:TenantId"];
+            var clientId = configuration["AzureAd:ClientId"];
+            var clientSecret = configuration["AzureAd:ClientSecret"];
+
+            var clientSecretCredential = new ClientSecretCredential(tenantId, clientId, clientSecret);
+
+            return new(clientSecretCredential);
+        });
+
+        services.AddScoped<IGraphService, GraphService>();
+
+        services.AddControllersWithViews(options =>
+        {
+            var policy = new AuthorizationPolicyBuilder()
+            .RequireAuthenticatedUser()
+            .Build();
+
+            options.Filters.Add(new AuthorizeFilter(policy));
+        });
+
+        services.AddRazorPages()
+            .AddMvcOptions(options =>
+            {
+                var policy = new AuthorizationPolicyBuilder()
+                .RequireAuthenticatedUser()
+                .Build();
+                options.Filters.Add(new AuthorizeFilter(policy));
+            })
+            .AddMicrosoftIdentityUI();
 
         services.AddHttpClient("WireMockClient", client =>
         {
@@ -66,7 +108,7 @@ public static class InfrastructureServicesRegistration
 
     private static void ConfigureServices(this IServiceCollection services)
     {
-        services.AddTransient<IAuthService, AuthService>();
+        //services.AddTransient<IAuthService, AuthService>();
         services.AddScoped<IAirbnbService, AirbnbService>();
         services.AddScoped<ICacheService, CacheService>();
     }

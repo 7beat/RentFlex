@@ -57,7 +57,7 @@ internal class UpsertEstateCommandHandler : IRequestHandler<UpsertEstateCommand>
 
     public async Task Handle(UpsertEstateCommand request, CancellationToken cancellationToken)
     {
-        var user = await unitOfWork.Users.FindSingleAsync(u => u.Id == request.OwnerId.ToString(), cancellationToken) ??
+        var user = await unitOfWork.Users.FindSingleAsync(u => u.Id == request.OwnerId, cancellationToken) ??
             throw new Exception("User with given Id was not found!");
 
         if (request.Id is null)

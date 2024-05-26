@@ -1,11 +1,5 @@
-﻿using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using RentFlex.Domain.Entities;
-using RentFlex.Infrastructure.Data;
-
-namespace CarRental.Infrastructure.Extensions;
+﻿namespace CarRental.Infrastructure.Extensions;
+#if false
 public static class ApplicationExtensions
 {
     /// <summary>
@@ -94,3 +88,5 @@ public static class ApplicationExtensions
     }
 
 }
+
+#endif
