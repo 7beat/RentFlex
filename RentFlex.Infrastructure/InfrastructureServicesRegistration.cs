@@ -1,14 +1,11 @@
 ﻿using Azure.Identity;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Graph;
 using Microsoft.Identity.Web;
-using Microsoft.Identity.Web.UI;
 using RentFlex.Application.Contracts.Infrastructure.Services;
 using RentFlex.Application.Contracts.Persistence;
 using RentFlex.Domain.Entities;
@@ -48,25 +45,6 @@ public static class InfrastructureServicesRegistration
         });
 
         services.AddScoped<IGraphService, GraphService>();
-
-        services.AddControllersWithViews(options =>
-        {
-            var policy = new AuthorizationPolicyBuilder()
-            .RequireAuthenticatedUser()
-            .Build();
-
-            options.Filters.Add(new AuthorizeFilter(policy));
-        });
-
-        services.AddRazorPages()
-            .AddMvcOptions(options =>
-            {
-                var policy = new AuthorizationPolicyBuilder()
-                .RequireAuthenticatedUser()
-                .Build();
-                options.Filters.Add(new AuthorizeFilter(policy));
-            })
-            .AddMicrosoftIdentityUI();
 
         services.AddHttpClient("WireMockClient", client =>
         {

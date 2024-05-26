@@ -5,8 +5,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.RegisterServices(builder.Configuration);
-//builder.Services.AddControllersWithViews();
-//builder.Services.AddRazorPages();
+builder.Services.AddControllersWithViews();
+builder.Services.AddRazorPages();
 
 var app = builder.Build();
 
@@ -17,7 +17,6 @@ if (app.Environment.IsDevelopment())
 }
 else if (app.Environment.IsStaging())
 {
-    await app.ApplyMigrationsAsync();
     //await app.ApplyMigrationsAsync();
 }
 else

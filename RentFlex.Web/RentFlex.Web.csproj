@@ -31,6 +31,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Areas\Account\" />
     <Folder Include="uploads\images\" />
     <Folder Include="wwwroot\images\estates\" />
   </ItemGroup>
