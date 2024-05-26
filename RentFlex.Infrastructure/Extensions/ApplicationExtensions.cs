@@ -1,7 +1,13 @@
-﻿namespace CarRental.Infrastructure.Extensions;
-#if false
+﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using RentFlex.Infrastructure.Data;
+
+namespace CarRental.Infrastructure.Extensions;
 public static class ApplicationExtensions
 {
+#if false
+
     /// <summary>
     /// Seeds the database with initial <see cref="ApplicationUser"/> and <see cref="IdentityRole"/> instances for IdentityUsers.
     /// </summary>
@@ -79,6 +85,8 @@ public static class ApplicationExtensions
         return ir;
     }
 
+#endif
+
     public static async Task ApplyMigrationsAsync(this IApplicationBuilder app)
     {
         using var scope = app.ApplicationServices.CreateScope();
@@ -88,5 +96,3 @@ public static class ApplicationExtensions
     }
 
 }
-
-#endif

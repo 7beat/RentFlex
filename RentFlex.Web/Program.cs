@@ -1,3 +1,4 @@
+using CarRental.Infrastructure.Extensions;
 using Microsoft.Extensions.FileProviders;
 using RentFlex.Web.Configuration;
 
@@ -17,7 +18,7 @@ if (app.Environment.IsDevelopment())
 }
 else if (app.Environment.IsStaging())
 {
-    //await app.ApplyMigrationsAsync();
+    await app.ApplyMigrationsAsync();
 }
 else
 {
