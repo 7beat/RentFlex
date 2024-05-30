@@ -1,4 +1,5 @@
 ﻿using Azure.Identity;
+using Azure.Storage.Blobs;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -46,6 +47,9 @@ public static class InfrastructureServicesRegistration
 
         services.AddScoped<IGraphService, GraphService>();
 
+        var blobConnectionString = configuration.GetConnectionString("AzureStorage");
+        services.AddSingleton(new BlobServiceClient(blobConnectionString));
+
         services.AddHttpClient("WireMockClient", client =>
         {
             client.BaseAddress = new Uri("http://localhost:5000");
@@ -89,6 +93,7 @@ public static class InfrastructureServicesRegistration
         //services.AddTransient<IAuthService, AuthService>();
         services.AddScoped<IAirbnbService, AirbnbService>();
         services.AddScoped<ICacheService, CacheService>();
+        services.AddScoped<IStorageService, StorageService>();
     }
 
     private static void ConfigureCache(this IServiceCollection services, IConfiguration configuration)
