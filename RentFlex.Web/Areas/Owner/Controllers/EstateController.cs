@@ -56,15 +56,13 @@ public class EstateController : Controller
             estateVM.Estate.OwnerId = new Guid(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
 
             if (estateImages.Any())
-            {
-                var images = PersistImages(estateImages).ToList();
-                estateVM.Estate.ImageUrls ??= new List<string>(images);
-            }
+                estateVM.Estate.Images = estateImages;
 
             await _mediator.Send(estateVM.Estate);
         }
 
-        TempData["success"] = estateVM.Estate.Id is null ? "Product created successfully" : "Product updated successfully";
+        string action = estateVM.Estate.Id is null ? "created" : "updated";
+        TempData["success"] = $"Estate {action} successfully";
 
         return RedirectToAction(nameof(Index));
     }
@@ -78,6 +76,7 @@ public class EstateController : Controller
         return Json(new { success = true });
     }
 
+    [Obsolete]
     private IEnumerable<string> PersistImages(List<IFormFile> images)
     {
         var imagePaths = new List<string>();
