@@ -8,4 +8,5 @@ public interface IUserRepository
     Task<IEnumerable<ApplicationUser>> FindAllAsync(CancellationToken cancellationToken = default);
     Task<int> CountAsync(CancellationToken cancellationToken = default);
     Task AddAsync(ApplicationUser user, CancellationToken cancellationToken = default);
+    Task<bool> ExistsAsync(Guid userId, CancellationToken cancellationToken = default);
 }
