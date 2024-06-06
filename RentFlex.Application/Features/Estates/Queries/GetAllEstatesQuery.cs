@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using MediatR;
 using RentFlex.Application.Contracts.Persistence;
-using RentFlex.Application.Features.Users.Commands;
 using RentFlex.Application.Models;
 
 namespace RentFlex.Application.Features.Estates.Queries;
@@ -24,9 +23,6 @@ internal class GetAllEstatesQueryHandler : IRequestHandler<GetAllEstatesQuery, I
     {
         var user = await unitOfWork.Users.FindSingleAsync(u => u.Id == request.OwnerId, cancellationToken);
 
-        if (user is null)
-            await mediator.Publish(new CreateUserNotification(request.OwnerId));
-
-        return user!.Estates.Any() ? mapper.Map<List<EstateDto>>(user!.Estates) : Enumerable.Empty<EstateDto>();
+        return user?.Estates is { Count: > 0 } ? mapper.Map<List<EstateDto>>(user!.Estates) : Enumerable.Empty<EstateDto>();
     }
 }
