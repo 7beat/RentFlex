@@ -1,21 +1,22 @@
 ﻿using Azure.Identity;
 using Azure.Storage.Blobs;
+using MediatR;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Graph;
-using Microsoft.Identity.Web;
 using RentFlex.Application.Contracts.Infrastructure.Services;
 using RentFlex.Application.Contracts.Persistence;
-using RentFlex.Domain.Entities;
+using RentFlex.Application.Features.Users.Commands;
 using RentFlex.Infrastructure.BackgroundServices;
 using RentFlex.Infrastructure.Data;
 using RentFlex.Infrastructure.Repositories;
 using RentFlex.Infrastructure.Services;
 using RentFlex.Utility.WireMock;
 using StackExchange.Redis;
+using System.Security.Claims;
 
 namespace RentFlex.Infrastructure;
 public static class InfrastructureServicesRegistration
@@ -23,7 +24,6 @@ public static class InfrastructureServicesRegistration
     public static void RegisterInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
         services.ConfigureDbContext(configuration);
-        //services.ConfigureIdentity();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.ConfigureServices();
         services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect(configuration.GetConnectionString("Cache")!));
@@ -31,8 +31,7 @@ public static class InfrastructureServicesRegistration
         services.AddHostedService<RedisUpdater>();
 
         // AzureAD Identity
-        services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
-            .AddMicrosoftIdentityWebApp(configuration);
+        services.ConfigureIdentity(configuration);
 
         services.AddSingleton<GraphServiceClient>(sp =>
         {
@@ -71,23 +70,6 @@ public static class InfrastructureServicesRegistration
         });
     }
 
-    private static void ConfigureIdentity(this IServiceCollection services)
-    {
-        services.AddIdentity<ApplicationUser, IdentityRole>(o =>
-        {
-            o.User.RequireUniqueEmail = true;
-        })
-        .AddEntityFrameworkStores<ApplicationDbContext>()
-        .AddDefaultTokenProviders()
-        .AddDefaultUI();
-
-        services.ConfigureApplicationCookie(options =>
-        {
-            options.LoginPath = "/Account/Login";
-            options.LogoutPath = "/Account/Logout";
-        });
-    }
-
     private static void ConfigureServices(this IServiceCollection services)
     {
         //services.AddTransient<IAuthService, AuthService>();
@@ -102,5 +84,34 @@ public static class InfrastructureServicesRegistration
         {
             options.Configuration = configuration.GetConnectionString("Cache");
         });
+    }
+
+    private static void ConfigureIdentity(this IServiceCollection services, IConfiguration configuration)
+    {
+        var azureAdConfig = configuration.GetSection("AzureAd");
+
+        services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
+            .AddOpenIdConnect(options =>
+            {
+                options.Authority = $"{azureAdConfig["Instance"]}/{azureAdConfig["Domain"]}/{azureAdConfig["SignUpSignInPolicyId"]}/v2.0";
+                options.ClientId = azureAdConfig["ClientId"];
+                options.CallbackPath = azureAdConfig["CallbackPath"];
+                options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+
+                options.Events = new OpenIdConnectEvents()
+                {
+                    OnTokenValidated = async context =>
+                    {
+                        var userId = context.Principal!.FindFirstValue(ClaimTypes.NameIdentifier);
+
+                        var unitOfWork = context.HttpContext.RequestServices.GetRequiredService<IUnitOfWork>();
+                        var mediator = context.HttpContext.RequestServices.GetRequiredService<IMediator>();
+
+                        if (!await unitOfWork.Users.ExistsAsync(Guid.Parse(userId!)))
+                            await mediator.Publish(new CreateUserNotification(Guid.Parse(userId!)));
+                    },
+                };
+            })
+            .AddCookie();
     }
 }
