@@ -1,12 +1,12 @@
 ﻿using Azure.Identity;
 using Azure.Storage.Blobs;
 using MediatR;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Graph;
+using Microsoft.Identity.Web;
 using RentFlex.Application.Contracts.Infrastructure.Services;
 using RentFlex.Application.Contracts.Persistence;
 using RentFlex.Application.Features.Users.Commands;
@@ -88,30 +88,24 @@ public static class InfrastructureServicesRegistration
 
     private static void ConfigureIdentity(this IServiceCollection services, IConfiguration configuration)
     {
-        var azureAdConfig = configuration.GetSection("AzureAd");
-
         services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
-            .AddOpenIdConnect(options =>
+            .AddMicrosoftIdentityWebApp(configuration);
+
+        services.Configure<OpenIdConnectOptions>(OpenIdConnectDefaults.AuthenticationScheme, options =>
+        {
+            options.Events = new OpenIdConnectEvents
             {
-                options.Authority = $"{azureAdConfig["Instance"]}/{azureAdConfig["Domain"]}/{azureAdConfig["SignUpSignInPolicyId"]}/v2.0";
-                options.ClientId = azureAdConfig["ClientId"];
-                options.CallbackPath = azureAdConfig["CallbackPath"];
-                options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-
-                options.Events = new OpenIdConnectEvents()
+                OnTokenValidated = async context =>
                 {
-                    OnTokenValidated = async context =>
-                    {
-                        var userId = context.Principal!.FindFirstValue(ClaimTypes.NameIdentifier);
+                    var userId = context.Principal!.FindFirstValue(ClaimTypes.NameIdentifier);
 
-                        var unitOfWork = context.HttpContext.RequestServices.GetRequiredService<IUnitOfWork>();
-                        var mediator = context.HttpContext.RequestServices.GetRequiredService<IMediator>();
+                    var unitOfWork = context.HttpContext.RequestServices.GetRequiredService<IUnitOfWork>();
+                    var mediator = context.HttpContext.RequestServices.GetRequiredService<IMediator>();
 
-                        if (!await unitOfWork.Users.ExistsAsync(Guid.Parse(userId!)))
-                            await mediator.Publish(new CreateUserNotification(Guid.Parse(userId!)));
-                    },
-                };
-            })
-            .AddCookie();
+                    if (!await unitOfWork.Users.ExistsAsync(Guid.Parse(userId!)))
+                        await mediator.Publish(new CreateUserNotification(Guid.Parse(userId!)));
+                }
+            };
+        });
     }
 }
