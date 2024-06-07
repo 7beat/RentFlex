@@ -4,7 +4,6 @@ networks:
   rentflex:
 volumes:
   sqlserver:
-  uploads:
   azurite:
 
 services:
@@ -16,11 +15,10 @@ services:
       dockerfile: RentFlex.Web/Dockerfile
     ports:
     - "8080:8080"
-    volumes:
-    - uploads:/app/uploads
     depends_on:
     - rentflex.db
     - rentflex.cache
+    - rentflex.azurite
     networks:
     - rentflex
     environment:
@@ -43,7 +41,6 @@ services:
   rentflex.cache:
     container_name: Rentflex-Cache
     image: redis:latest
-    restart: always
     ports:
     - "6379:6379"
     networks:
