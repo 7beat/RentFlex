@@ -1,13 +1,14 @@
 ﻿using Azure.Storage.Blobs;
+using Microsoft.Extensions.Logging;
 using RentFlex.Application.Contracts.Infrastructure.Services;
 
 namespace RentFlex.Infrastructure.Services;
-public class StorageService(BlobServiceClient blobServiceClient) : IStorageService
+public class StorageService(BlobServiceClient blobServiceClient, ILogger<StorageService> logger) : IStorageService
 {
     public async Task<string> AddAsync(Stream stream, CancellationToken cancellationToken)
     {
         var containerClient = blobServiceClient.GetBlobContainerClient("images");
-        await containerClient.CreateIfNotExistsAsync();
+        await containerClient.CreateIfNotExistsAsync(cancellationToken: cancellationToken);
 
         var blobClient = containerClient.GetBlobClient(Guid.NewGuid().ToString());
 
@@ -29,4 +30,21 @@ public class StorageService(BlobServiceClient blobServiceClient) : IStorageServi
         return response.Value;
     }
 
+    public async Task PersistDbAsync(Stream stream, CancellationToken cancellationToken)
+    {
+        try
+        {
+            var containerClient = blobServiceClient.GetBlobContainerClient("db-snapshots");
+            await containerClient.CreateIfNotExistsAsync(cancellationToken: cancellationToken);
+
+            var blobClient = containerClient.GetBlobClient($"{DateTime.Now.ToString("dd.MM.yyyy-HH.mm")}_dbsnapshot.bacpac");
+
+            await blobClient.UploadAsync(stream, cancellationToken);
+        }
+        catch (Exception ex)
+        {
+            logger.LogWarning($"Error occured while persisting Db data: {ex.Message}");
+            throw;
+        }
+    }
 }
