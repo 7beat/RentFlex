@@ -7,14 +7,23 @@ public class StorageService(BlobServiceClient blobServiceClient, ILogger<Storage
 {
     public async Task<string> AddAsync(Stream stream, CancellationToken cancellationToken)
     {
-        var containerClient = blobServiceClient.GetBlobContainerClient("images");
-        await containerClient.CreateIfNotExistsAsync(cancellationToken: cancellationToken);
+        try
+        {
+            var containerClient = blobServiceClient.GetBlobContainerClient("images");
+            await containerClient.CreateIfNotExistsAsync(cancellationToken: cancellationToken);
 
-        var blobClient = containerClient.GetBlobClient(Guid.NewGuid().ToString());
+            var blobClient = containerClient.GetBlobClient(Guid.NewGuid().ToString());
 
-        var response = await blobClient.UploadAsync(stream, cancellationToken);
+            var response = await blobClient.UploadAsync(stream, cancellationToken);
 
-        return blobClient.Uri.AbsoluteUri;
+            return blobClient.Uri.AbsoluteUri;
+        }
+        catch (Exception ex)
+        {
+            logger.LogInformation($"Error occured while uploading Image to Blob: {ex.Message}");
+            throw;
+        }
+
     }
 
     public async Task<bool> DeleteAsync(string blobUrl, CancellationToken cancellationToken)
