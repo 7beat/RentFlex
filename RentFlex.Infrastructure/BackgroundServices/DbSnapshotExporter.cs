@@ -42,5 +42,6 @@ internal class DbSnapshotExporter(IConfiguration configuration, IServiceScopeFac
         stream.Position = 0;
 
         await storageService.PersistDbAsync(stream, stoppingToken);
+        logger.LogInformation($"Database Snapshot created at: {DateTime.Now}");
     }
 }
