@@ -29,6 +29,7 @@ public static class InfrastructureServicesRegistration
         services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect(configuration.GetConnectionString("Cache")!));
         services.ConfigureCache(configuration);
         services.AddHostedService<RedisUpdater>();
+        //services.AddHostedService<DbSnapshotExporter>();
 
         // AzureAD Identity
         services.ConfigureIdentity(configuration);
