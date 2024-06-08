@@ -24,6 +24,7 @@
     <PackageReference Include="Microsoft.Graph" Version="5.53.0" />
     <PackageReference Include="Microsoft.Identity.Web" Version="2.18.1" />
     <PackageReference Include="Microsoft.Identity.Web.UI" Version="2.18.1" />
+    <PackageReference Include="Microsoft.SqlServer.DacFx" Version="162.3.563" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
 
