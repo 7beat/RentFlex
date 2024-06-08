@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.FeatureManagement;
 using Microsoft.Graph;
 using Microsoft.Identity.Web;
 using RentFlex.Application.Contracts.Infrastructure.Services;
@@ -23,13 +24,15 @@ public static class InfrastructureServicesRegistration
 {
     public static void RegisterInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
+        services.AddFeatureManagement(configuration.GetSection("FeatureFlags"));
+
         services.ConfigureDbContext(configuration);
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.ConfigureServices();
         services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect(configuration.GetConnectionString("Cache")!));
         services.ConfigureCache(configuration);
         services.AddHostedService<RedisUpdater>();
-        //services.AddHostedService<DbSnapshotExporter>();
+        services.AddHostedService<DbSnapshotExporter>();
 
         // AzureAD Identity
         services.ConfigureIdentity(configuration);

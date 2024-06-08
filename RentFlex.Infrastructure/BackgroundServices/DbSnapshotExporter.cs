@@ -2,16 +2,17 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.FeatureManagement;
 using Microsoft.SqlServer.Dac;
+using RentFlex.Application.Constants;
 using RentFlex.Application.Contracts.Infrastructure.Services;
 
 namespace RentFlex.Infrastructure.BackgroundServices;
-internal class DbSnapshotExporter(IConfiguration configuration, IServiceScopeFactory scopeFactory, ILogger<DbSnapshotExporter> logger) : BackgroundService
+internal class DbSnapshotExporter(IConfiguration configuration, IServiceScopeFactory scopeFactory, IFeatureManager featureManager, ILogger<DbSnapshotExporter> logger) : BackgroundService
 {
-    // ToDo: Add FeatureToggle
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        while (!stoppingToken.IsCancellationRequested)
+        while (!stoppingToken.IsCancellationRequested && await featureManager.IsEnabledAsync(FeatureFlags.PersistDatabase))
         {
             try
             {
