@@ -10,13 +10,11 @@ internal class GetAllEstatesQueryHandler : IRequestHandler<GetAllEstatesQuery, I
 {
     private readonly IMapper mapper;
     private readonly IUnitOfWork unitOfWork;
-    private readonly IMediator mediator;
 
-    public GetAllEstatesQueryHandler(IMapper mapper, IUnitOfWork unitOfWork, IMediator mediator)
+    public GetAllEstatesQueryHandler(IMapper mapper, IUnitOfWork unitOfWork)
     {
         this.mapper = mapper;
         this.unitOfWork = unitOfWork;
-        this.mediator = mediator;
     }
 
     public async Task<IEnumerable<EstateDto>> Handle(GetAllEstatesQuery request, CancellationToken cancellationToken)
