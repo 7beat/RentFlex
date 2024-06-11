@@ -50,9 +50,10 @@ services:
     image: mcr.microsoft.com/azure-storage/azurite
     container_name: RentFlex-Azurite
     ports:
-    - "10000:10000" 
+    - "10000:10000"
     volumes:
     - azurite:/data
+    hostname: azurite
     networks:
     - rentflex
     
