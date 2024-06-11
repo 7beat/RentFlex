@@ -17,7 +17,13 @@ public class StorageService(BlobServiceClient blobServiceClient, ILogger<Storage
 
             var response = await blobClient.UploadAsync(stream, cancellationToken);
 
-            return blobClient.Uri.AbsoluteUri;
+            var blobUrl = blobClient.Uri.AbsoluteUri;
+
+            // Temporary
+            if (blobUrl.Contains("azurite"))
+                blobUrl = blobUrl.Replace("azurite", "127.0.0.1");
+
+            return blobUrl;
         }
         catch (Exception ex)
         {
