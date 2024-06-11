@@ -127,7 +127,8 @@ internal class UpsertEstateCommandHandler : IRequestHandler<UpsertEstateCommand>
         var tasks = images.Select(async image =>
         {
             using var stream = image.OpenReadStream();
-            return await storageService.AddAsync(stream, cancellationToken);
+            var extension = Path.GetExtension(image.FileName);
+            return await storageService.AddAsync(stream, extension, cancellationToken);
         });
 
         var imageUrls = await Task.WhenAll(tasks);

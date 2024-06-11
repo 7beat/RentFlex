@@ -5,14 +5,15 @@ using RentFlex.Application.Contracts.Infrastructure.Services;
 namespace RentFlex.Infrastructure.Services;
 public class StorageService(BlobServiceClient blobServiceClient, ILogger<StorageService> logger) : IStorageService
 {
-    public async Task<string> AddAsync(Stream stream, CancellationToken cancellationToken)
+    public async Task<string> AddAsync(Stream stream, string fileExtension, CancellationToken cancellationToken)
     {
         try
         {
             var containerClient = blobServiceClient.GetBlobContainerClient("images");
             await containerClient.CreateIfNotExistsAsync(cancellationToken: cancellationToken);
 
-            var blobClient = containerClient.GetBlobClient(Guid.NewGuid().ToString());
+            var blobName = Guid.NewGuid().ToString() + fileExtension;
+            var blobClient = containerClient.GetBlobClient(blobName);
 
             var response = await blobClient.UploadAsync(stream, cancellationToken);
 
