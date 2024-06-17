@@ -4,8 +4,9 @@ Rentflex is an innovative ASP.NET MVC project designed to seamlessly synchronize
 ## Features
 * Entity Framework Core with Unit of Work and repository patterns
 * CQRS
-* User seeding with assigned roles
 * Polly for External Services Calls
 * WireMock for simulating External Services
 * Redis Cache
+* Azure AD B2C for user authentication
+* Azure Blob Storage to persist user uploads
 * Containerized using Docker
