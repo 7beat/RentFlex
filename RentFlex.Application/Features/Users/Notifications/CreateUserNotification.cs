@@ -12,8 +12,8 @@ public class CreateUserNotificationHandler(IGraphService graphService, IUnitOfWo
     public async Task Handle(CreateUserNotification notification, CancellationToken cancellationToken)
     {
         var user = await graphService.GetUserAsync(notification.userId);
-        await unitOfWork.Users.AddAsync(MapUser(user!));
-        await unitOfWork.SaveChangesAsync();
+        await unitOfWork.Users.AddAsync(MapUser(user!), cancellationToken);
+        await unitOfWork.SaveChangesAsync(cancellationToken);
     }
 
     private ApplicationUser MapUser(User user) =>
