@@ -5,13 +5,13 @@ using RentFlex.Application.Contracts.Persistence;
 using RentFlex.Domain.Entities;
 
 namespace RentFlex.Application.Features.Users.Commands;
-public record CreateUserNotification(Guid userId) : INotification;
+public record CreateUserNotification(Guid UserId) : INotification;
 
 public class CreateUserNotificationHandler(IGraphService graphService, IUnitOfWork unitOfWork) : INotificationHandler<CreateUserNotification>
 {
     public async Task Handle(CreateUserNotification notification, CancellationToken cancellationToken)
     {
-        var user = await graphService.GetUserAsync(notification.userId);
+        var user = await graphService.GetUserAsync(notification.UserId);
         await unitOfWork.Users.AddAsync(MapUser(user!), cancellationToken);
         await unitOfWork.SaveChangesAsync(cancellationToken);
     }
