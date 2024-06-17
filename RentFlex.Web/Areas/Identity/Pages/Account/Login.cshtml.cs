@@ -102,6 +102,7 @@ namespace RentFlex.Web.Areas.Identity.Pages.Account
             returnUrl ??= Url.Content("~/");
 
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+#if false
 
             if (ModelState.IsValid)
             {
@@ -135,6 +136,7 @@ namespace RentFlex.Web.Areas.Identity.Pages.Account
                 }
             }
 
+#endif
             // If we got this far, something failed, redisplay form
             return Page();
         }

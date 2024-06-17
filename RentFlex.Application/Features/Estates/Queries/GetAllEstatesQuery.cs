@@ -19,7 +19,8 @@ internal class GetAllEstatesQueryHandler : IRequestHandler<GetAllEstatesQuery, I
 
     public async Task<IEnumerable<EstateDto>> Handle(GetAllEstatesQuery request, CancellationToken cancellationToken)
     {
-        var user = await unitOfWork.Users.FindSingleAsync(u => u.Id == request.OwnerId.ToString(), cancellationToken);
-        return mapper.Map<List<EstateDto>>(user!.Estates);
+        var user = await unitOfWork.Users.FindSingleAsync(u => u.Id == request.OwnerId, cancellationToken);
+
+        return user?.Estates is { Count: > 0 } ? mapper.Map<List<EstateDto>>(user!.Estates) : Enumerable.Empty<EstateDto>();
     }
 }

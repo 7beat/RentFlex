@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RentFlex.Infrastructure.Data;
 
@@ -11,9 +12,11 @@ using RentFlex.Infrastructure.Data;
 namespace RentFlex.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240525231137_TweakedApplicationUser")]
+    partial class TweakedApplicationUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -33,10 +36,6 @@ namespace RentFlex.Infrastructure.Migrations
 
                     b.Property<Guid?>("BookingReference")
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Username")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -130,7 +129,7 @@ namespace RentFlex.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("50333b36-5623-4773-8148-bc0292edb7c7"),
+                            Id = new Guid("92612953-9caa-46a9-aa78-cf3cbc246558"),
                             EndDate = new DateTime(2024, 5, 29, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             EstateId = new Guid("555daf1f-c760-48d4-9fcf-410cec349f23"),
                             RentType = "ShortTerm",

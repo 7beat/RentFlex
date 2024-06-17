@@ -22,4 +22,9 @@ public class UserRepository : IUserRepository
     public async Task<int> CountAsync(CancellationToken cancellationToken = default) =>
         await _dbContext.Set<ApplicationUser>().CountAsync(cancellationToken);
 
+    public async Task AddAsync(ApplicationUser user, CancellationToken cancellationToken = default) =>
+        await _dbContext.Set<ApplicationUser>().AddAsync(user, cancellationToken);
+
+    public async Task<bool> ExistsAsync(Guid userId, CancellationToken cancellationToken = default) =>
+        await _dbContext.Set<ApplicationUser>().AnyAsync(u => u.Id == userId, cancellationToken);
 }

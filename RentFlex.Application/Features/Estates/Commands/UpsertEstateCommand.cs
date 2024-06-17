@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using MediatR;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using RentFlex.Application.Contracts.Infrastructure.Services;
 using RentFlex.Application.Contracts.Persistence;
@@ -22,11 +23,15 @@ public record UpsertEstateCommand : IRequest
     public double CostPerDay { get; set; }
     [DisplayName("Type of Estate")]
     public EstateType EstateType { get; set; }
+    public Guid OwnerId { get; set; }
+
+    // Images
+    [ValidateNever]
+    public IEnumerable<IFormFile> Images { get; set; } = default!;
     public int ThumbnailImage { get; set; }
     [ValidateNever]
     [DisplayName("Images")]
     public List<string> ImageUrls { get; set; } = default!;
-    public Guid OwnerId { get; set; }
 
     // Address
     public string? Country { get; set; }
@@ -48,27 +53,33 @@ internal class UpsertEstateCommandHandler : IRequestHandler<UpsertEstateCommand>
     private readonly IMapper mapper;
     private readonly IUnitOfWork unitOfWork;
     private readonly IAirbnbService airbnbService;
-    public UpsertEstateCommandHandler(IMapper mapper, IUnitOfWork unitOfWork, IAirbnbService airbnbService)
+    private readonly IStorageService storageService;
+    public UpsertEstateCommandHandler(IMapper mapper, IUnitOfWork unitOfWork, IAirbnbService airbnbService, IStorageService storageService)
     {
         this.mapper = mapper;
         this.unitOfWork = unitOfWork;
         this.airbnbService = airbnbService;
+        this.storageService = storageService;
     }
 
     public async Task Handle(UpsertEstateCommand request, CancellationToken cancellationToken)
     {
-        var user = await unitOfWork.Users.FindSingleAsync(u => u.Id == request.OwnerId.ToString(), cancellationToken) ??
+        var user = await unitOfWork.Users.FindSingleAsync(u => u.Id == request.OwnerId, cancellationToken) ??
             throw new Exception("User with given Id was not found!");
 
         if (request.Id is null)
         {
             var estate = mapper.Map<Estate>(request);
-            estate.ThumbnailImageUrl = request.ImageUrls.FirstOrDefault();
-            estate.ImageUrls = new(request.ImageUrls);
 
             user.Estates ??= new List<Estate>();
             user.Estates.Add(estate);
-            //(user.Estates ??= new List<Estate>()).Add(estate);
+
+            if (request.Images is not null)
+            {
+                var imageUrls = await PersistImagesAsync(request.Images, cancellationToken);
+                estate.ImageUrls ??= new(imageUrls);
+                estate.ThumbnailImageUrl = imageUrls.First();
+            }
 
             estate.AirbnbReference = !request.PublishAirbnb || user.AirbnbReference is null ?
                 null :
@@ -81,11 +92,14 @@ internal class UpsertEstateCommandHandler : IRequestHandler<UpsertEstateCommand>
             var estateDb = user.Estates.First(e => e.Id == request.Id);
 
             mapper.Map(request, estateDb);
-            if (request.ImageUrls is not null)
+
+            if (request.Images is not null)
             {
+                var imageUrls = await PersistImagesAsync(request.Images, cancellationToken);
+
                 var newImages = estateDb.ImageUrls is null ?
-                    new List<string>(request.ImageUrls) :
-                    estateDb.ImageUrls.Concat(request.ImageUrls);
+                    new List<string>(imageUrls) :
+                    estateDb.ImageUrls.Concat(imageUrls);
 
                 estateDb.ImageUrls = new List<string>(newImages);
             }
@@ -106,5 +120,18 @@ internal class UpsertEstateCommandHandler : IRequestHandler<UpsertEstateCommand>
         }
 
         await unitOfWork.SaveChangesAsync();
+    }
+
+    private async Task<IEnumerable<string>> PersistImagesAsync(IEnumerable<IFormFile> images, CancellationToken cancellationToken)
+    {
+        var tasks = images.Select(async image =>
+        {
+            using var stream = image.OpenReadStream();
+            var extension = Path.GetExtension(image.FileName);
+            return await storageService.AddAsync(stream, extension, cancellationToken);
+        });
+
+        var imageUrls = await Task.WhenAll(tasks);
+        return imageUrls;
     }
 }

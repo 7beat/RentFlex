@@ -4,7 +4,7 @@ using RentFlex.Domain.Entities;
 
 namespace RentFlex.Application.Features.Users.Queries;
 
-public record GetSingleUserQuery(string Id) : IRequest<ApplicationUser>
+public record GetSingleUserQuery(Guid Id) : IRequest<ApplicationUser>
 {
     internal class GetSingleUserQueryHandler : IRequestHandler<GetSingleUserQuery, ApplicationUser>
     {
