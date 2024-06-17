@@ -6,6 +6,7 @@ using Polly.Retry;
 using RentFlex.Application.Contracts.Infrastructure.Services;
 using RentFlex.Application.Models;
 using RentFlex.Domain.entities;
+using System.Net.Http.Json;
 using System.Text;
 
 namespace RentFlex.Infrastructure.Services;
@@ -152,20 +153,14 @@ public class AirbnbService : IAirbnbService
         return result;
     }
 
-    public async Task<IEnumerable<RentalDto>> GetAllRentals(Guid userReference, Guid estateReference)
+    public async Task<IEnumerable<RentalDto>> GetAllRentals(Guid userReference, Guid estateReference, CancellationToken cancellationToken)
     {
-        List<RentalDto> rentals = new();
+        List<RentalDto>? rentals = new();
         try
         {
             await retryPolicy.ExecuteAsync(async () =>
             {
-                var apiResponse = await httpClient.GetAsync($"/airbnb/{userReference}/estates/{estateReference}/rentals");
-                var response = await apiResponse.Content.ReadAsStringAsync();
-
-                if (!string.IsNullOrEmpty(response))
-                {
-                    rentals = JsonConvert.DeserializeObject<List<RentalDto>>(response)!;
-                }
+                rentals = await httpClient.GetFromJsonAsync<List<RentalDto>>($"/airbnb/{userReference}/estates/{estateReference}/rentals", cancellationToken);
             });
         }
         catch (Exception ex)
@@ -174,6 +169,6 @@ public class AirbnbService : IAirbnbService
             throw;
         }
 
-        return rentals;
+        return rentals ?? Enumerable.Empty<RentalDto>();
     }
 }
