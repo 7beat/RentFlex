@@ -6,12 +6,12 @@ namespace RentFlex.Infrastructure.Services;
 
 public class GraphService(GraphServiceClient graphClient) : IGraphService
 {
-    public async Task<User> GetUserAsync(Guid userId)
+    public async Task<User> GetUserAsync(Guid userId, CancellationToken cancellationToken)
     {
         try
         {
             var user = await graphClient.Users[userId.ToString()]
-                .GetAsync();
+                .GetAsync(cancellationToken: cancellationToken);
 
             return user;
         }
@@ -21,9 +21,9 @@ public class GraphService(GraphServiceClient graphClient) : IGraphService
         }
     }
 
-    public async Task<int> GetUsersCountAsync()
+    public async Task<int> GetUsersCountAsync(CancellationToken cancellationToken)
     {
-        var users = await graphClient.Users.GetAsync();
+        var users = await graphClient.Users.GetAsync(cancellationToken: cancellationToken);
 
         return users?.Value?.Count ?? 0;
     }
