@@ -6,7 +6,7 @@ namespace RentFlex.Infrastructure.Services;
 
 public class GraphService(GraphServiceClient graphClient) : IGraphService
 {
-    public async Task<User> GetUserAsync(Guid userId, CancellationToken cancellationToken)
+    public async Task<User?> GetUserAsync(Guid userId, CancellationToken cancellationToken)
     {
         try
         {

@@ -11,7 +11,9 @@ public class CreateUserNotificationHandler(IGraphService graphService, IUnitOfWo
 {
     public async Task Handle(CreateUserNotification notification, CancellationToken cancellationToken)
     {
-        var user = await graphService.GetUserAsync(notification.UserId, cancellationToken);
+        var user = await graphService.GetUserAsync(notification.UserId, cancellationToken) ??
+            throw new Exception($"User with Id: {notification.UserId}, was not found in AzureAD");
+
         await unitOfWork.Users.AddAsync(MapUser(user!), cancellationToken);
         await unitOfWork.SaveChangesAsync(cancellationToken);
     }
