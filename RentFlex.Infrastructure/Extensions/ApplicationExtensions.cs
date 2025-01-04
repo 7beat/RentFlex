@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using RentFlex.Infrastructure.Data;
 
-namespace CarRental.Infrastructure.Extensions;
+namespace RentFlex.Infrastructure.Extensions;
 public static class ApplicationExtensions
 {
 #if false

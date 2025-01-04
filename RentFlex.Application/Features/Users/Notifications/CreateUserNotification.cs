@@ -4,7 +4,7 @@ using RentFlex.Application.Contracts.Infrastructure.Services;
 using RentFlex.Application.Contracts.Persistence;
 using RentFlex.Domain.Entities;
 
-namespace RentFlex.Application.Features.Users.Commands;
+namespace RentFlex.Application.Features.Users.Notifications;
 public record CreateUserNotification(Guid UserId) : INotification;
 
 public class CreateUserNotificationHandler(IGraphService graphService, IUnitOfWork unitOfWork) : INotificationHandler<CreateUserNotification>
@@ -16,7 +16,7 @@ public class CreateUserNotificationHandler(IGraphService graphService, IUnitOfWo
         await unitOfWork.SaveChangesAsync(cancellationToken);
     }
 
-    private ApplicationUser MapUser(User user) =>
+    private static ApplicationUser MapUser(User user) =>
         new()
         {
             Id = Guid.Parse(user.Id!),

@@ -1,4 +1,5 @@
-﻿using Azure.Identity;
+﻿using System.Security.Claims;
+using Azure.Identity;
 using Azure.Storage.Blobs;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
@@ -10,14 +11,13 @@ using Microsoft.Graph;
 using Microsoft.Identity.Web;
 using RentFlex.Application.Contracts.Infrastructure.Services;
 using RentFlex.Application.Contracts.Persistence;
-using RentFlex.Application.Features.Users.Commands;
+using RentFlex.Application.Features.Users.Notifications;
 using RentFlex.Infrastructure.BackgroundServices;
 using RentFlex.Infrastructure.Data;
 using RentFlex.Infrastructure.Repositories;
 using RentFlex.Infrastructure.Services;
 using RentFlex.Utility.WireMock;
 using StackExchange.Redis;
-using System.Security.Claims;
 
 namespace RentFlex.Infrastructure;
 public static class InfrastructureServicesRegistration

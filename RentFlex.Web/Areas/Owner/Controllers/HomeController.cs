@@ -1,10 +1,10 @@
-﻿using MediatR;
+﻿using System.Diagnostics;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using RentFlex.Application.Features.Home.Queries;
 using RentFlex.Web.Models;
-using System.Diagnostics;
 
-namespace RentFlex.Web.Areas.User.Controllers;
+namespace RentFlex.Web.Areas.Owner.Controllers;
 
 [Area("Owner")]
 public class HomeController : Controller

@@ -1,4 +1,5 @@
-using CarRental.Infrastructure.Extensions;
+using System.Globalization;
+using RentFlex.Infrastructure.Extensions;
 using RentFlex.Web.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -17,6 +18,8 @@ if (app.Environment.IsDevelopment())
 }
 else if (app.Environment.IsStaging())
 {
+    CultureInfo.DefaultThreadCurrentCulture = new CultureInfo("pl-PL");
+    CultureInfo.DefaultThreadCurrentUICulture = new CultureInfo("pl-PL");
     await app.ApplyMigrationsAsync();
 }
 else
