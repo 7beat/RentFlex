@@ -1,12 +1,13 @@
 ﻿using System.Diagnostics;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using RentFlex.Application.Constants;
 using RentFlex.Application.Features.Home.Queries;
 using RentFlex.Web.Models;
 
 namespace RentFlex.Web.Areas.Owner.Controllers;
 
-[Area("Owner")]
+[Area(WebConstants.OwnerArea)]
 public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
@@ -22,9 +23,7 @@ public class HomeController : Controller
     {
         if (User.Identity!.IsAuthenticated)
         {
-            //var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            //var estates = await _mediator.Send(new GetAllEstatesQuery(Guid.Parse(userId!)));
-            return RedirectToAction(nameof(Index), "Estate");
+            return RedirectToAction(nameof(Index), WebConstants.EstateController);
         }
 
         var applicationStats = await _mediator.Send(new GetApplicationStatsQuery());

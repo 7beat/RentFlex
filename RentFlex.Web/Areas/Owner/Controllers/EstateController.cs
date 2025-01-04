@@ -1,15 +1,16 @@
-﻿using AutoMapper;
+﻿using System.Security.Claims;
+using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using RentFlex.Application.Constants;
 using RentFlex.Application.Features.Estates.Commands;
 using RentFlex.Application.Features.Estates.Queries;
 using RentFlex.Web.Models.ViewModels;
-using System.Security.Claims;
 
 namespace RentFlex.Web.Areas.Owner.Controllers;
 [Authorize]
-[Area("Owner")]
+[Area(WebConstants.OwnerArea)]
 public class EstateController : Controller
 {
     private readonly IMediator _mediator;
@@ -55,7 +56,7 @@ public class EstateController : Controller
         {
             estateVM.Estate.OwnerId = new Guid(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
 
-            if (estateImages.Any())
+            if (estateImages.Count > 0)
                 estateVM.Estate.Images = estateImages;
 
             await _mediator.Send(estateVM.Estate);

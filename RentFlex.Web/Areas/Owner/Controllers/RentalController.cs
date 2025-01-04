@@ -1,13 +1,14 @@
-﻿using MediatR;
+﻿using System.Security.Claims;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using RentFlex.Application.Constants;
 using RentFlex.Application.Features.Rentals.Queries;
-using System.Security.Claims;
 
 namespace RentFlex.Web.Areas.Owner.Controllers;
 
 [Authorize]
-[Area("Owner")]
+[Area(WebConstants.OwnerArea)]
 public class RentalController : Controller
 {
     private readonly IMediator mediator;
