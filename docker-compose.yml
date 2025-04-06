@@ -7,7 +7,7 @@ volumes:
   azurite:
 
 services:
-  rentflex.web:
+  rentflex-web:
     container_name: RentFlex-Web
     image: ${DOCKER_REGISTRY-}rentflexweb
     build:
@@ -16,16 +16,16 @@ services:
     ports:
     - "8080:8080"
     depends_on:
-    - rentflex.db
-    - rentflex.cache
-    - rentflex.azurite
+    - rentflex-db
+    - rentflex-cache
+    - rentflex-azurite
     networks:
     - rentflex
     environment:
     - ASPNETCORE_ENVIRONMENT=Staging
     - ASPNETCORE_HTTP_PORTS=8080
 
-  rentflex.db:
+  rentflex-db:
     container_name: RentFlex-Db
     image: mcr.microsoft.com/mssql/server:2022-latest
     ports:
@@ -38,7 +38,7 @@ services:
     volumes:
     - sqlserver:/var/opt/mssql
  
-  rentflex.cache:
+  rentflex-cache:
     container_name: Rentflex-Cache
     image: redis:latest
     ports:
@@ -46,7 +46,7 @@ services:
     networks:
     - rentflex
 
-  rentflex.azurite:
+  rentflex-azurite:
     image: mcr.microsoft.com/azure-storage/azurite
     container_name: RentFlex-Azurite
     ports:
