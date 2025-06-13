@@ -1,4 +1,6 @@
-﻿using AutoMapper;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
@@ -6,8 +8,6 @@ using RentFlex.Application.Contracts.Infrastructure.Services;
 using RentFlex.Application.Contracts.Persistence;
 using RentFlex.Application.Models;
 using RentFlex.Domain.entities;
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
 
 namespace RentFlex.Application.Features.Estates.Commands;
 public record UpsertEstateCommand : IRequest
@@ -52,9 +52,9 @@ internal class UpsertEstateCommandHandler : IRequestHandler<UpsertEstateCommand>
 {
     private readonly IMapper mapper;
     private readonly IUnitOfWork unitOfWork;
-    private readonly IAirbnbService airbnbService;
+    private readonly IAirbnbApiService airbnbService;
     private readonly IStorageService storageService;
-    public UpsertEstateCommandHandler(IMapper mapper, IUnitOfWork unitOfWork, IAirbnbService airbnbService, IStorageService storageService)
+    public UpsertEstateCommandHandler(IMapper mapper, IUnitOfWork unitOfWork, IAirbnbApiService airbnbService, IStorageService storageService)
     {
         this.mapper = mapper;
         this.unitOfWork = unitOfWork;

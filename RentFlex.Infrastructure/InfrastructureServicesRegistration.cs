@@ -77,7 +77,7 @@ public static class InfrastructureServicesRegistration
     private static void ConfigureServices(this IServiceCollection services)
     {
         //services.AddTransient<IAuthService, AuthService>();
-        services.AddScoped<IAirbnbService, AirbnbService>();
+        services.AddScoped<IAirbnbApiService, AirbnbApiService>();
         services.AddScoped<ICacheService, CacheService>();
         services.AddScoped<IStorageService, StorageService>();
     }
