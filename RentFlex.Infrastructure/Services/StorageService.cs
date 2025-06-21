@@ -27,7 +27,7 @@ public class StorageService(BlobServiceClient blobServiceClient, ILogger<Storage
         }
         catch (Exception ex)
         {
-            logger.LogInformation($"Error occured while uploading Image to Blob Storage: {ex.Message}");
+            logger.LogWarning("Error occured while uploading Image to Blob Storage: {message}", ex.Message);
             throw;
         }
 
@@ -59,7 +59,7 @@ public class StorageService(BlobServiceClient blobServiceClient, ILogger<Storage
         }
         catch (Exception ex)
         {
-            logger.LogWarning($"Error occured while persisting Db data: {ex.Message}");
+            logger.LogWarning("Error occured while persisting Db data: {message}", ex.Message);
             throw;
         }
     }
