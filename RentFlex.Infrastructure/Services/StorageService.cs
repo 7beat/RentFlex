@@ -73,8 +73,7 @@ public class StorageService(BlobServiceClient blobServiceClient, ILogger<Storage
 
         string replacementHost = IsRunningInKubernetes() ? "127.0.0.1:30000" : "127.0.0.1:10000";
 
-        var test = absoluteUri.Replace(azuriteHost, replacementHost);
-        return test;
+        return absoluteUri.Replace(azuriteHost, replacementHost);
     }
 
     private static bool IsRunningInKubernetes() =>
