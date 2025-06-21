@@ -8,9 +8,11 @@ metadata:
     io.kompose.service: rentflex-azurite
   name: rentflex-azurite
 spec:
+  type: NodePort
   ports:
     - name: "10000"
       port: 10000
       targetPort: 10000
+      nodePort: 30000
   selector:
     io.kompose.service: rentflex-azurite
