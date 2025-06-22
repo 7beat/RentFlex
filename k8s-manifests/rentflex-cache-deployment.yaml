@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: C:\ProgramData\chocolatey\lib\kubernetes-kompose\tools\kompose.exe convert -f docker-compose.yml --out k8s-manifests/
+    kompose.version: 1.35.0 (9532ceef3)
+  labels:
+    io.kompose.service: rentflex-cache
+  name: rentflex-cache
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: rentflex-cache
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: C:\ProgramData\chocolatey\lib\kubernetes-kompose\tools\kompose.exe convert -f docker-compose.yml --out k8s-manifests/
+        kompose.version: 1.35.0 (9532ceef3)
+      labels:
+        io.kompose.service: rentflex-cache
+    spec:
+      containers:
+        - image: redis:latest
+          name: rentflex-cache
+          ports:
+            - containerPort: 6379
+              protocol: TCP
+      restartPolicy: Always

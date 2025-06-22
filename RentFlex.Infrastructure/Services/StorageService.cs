@@ -1,4 +1,5 @@
-﻿using Azure.Storage.Blobs;
+﻿using System.Net;
+using Azure.Storage.Blobs;
 using Microsoft.Extensions.Logging;
 using RentFlex.Application.Contracts.Infrastructure.Services;
 
@@ -17,17 +18,16 @@ public class StorageService(BlobServiceClient blobServiceClient, ILogger<Storage
 
             var response = await blobClient.UploadAsync(stream, cancellationToken);
 
-            var blobUrl = blobClient.Uri.AbsoluteUri;
+            if (response.GetRawResponse().Status == (int)HttpStatusCode.Created)
+                logger.LogInformation("Image succesfully uploaded to Blob Storage with url: {absoluteUri}", blobClient.Uri.AbsoluteUri);
 
-            // Temporary
-            if (blobUrl.Contains("azurite"))
-                blobUrl = blobUrl.Replace("azurite", "127.0.0.1");
+            var envFriendlyPath = MakeEnvironmentFriendlyPath(blobClient.Uri.AbsoluteUri);
 
-            return blobUrl;
+            return envFriendlyPath;
         }
         catch (Exception ex)
         {
-            logger.LogInformation($"Error occured while uploading Image to Blob: {ex.Message}");
+            logger.LogWarning("Error occured while uploading Image to Blob Storage: {message}", ex.Message);
             throw;
         }
 
@@ -53,14 +53,29 @@ public class StorageService(BlobServiceClient blobServiceClient, ILogger<Storage
             var containerClient = blobServiceClient.GetBlobContainerClient("db-snapshots");
             await containerClient.CreateIfNotExistsAsync(cancellationToken: cancellationToken);
 
-            var blobClient = containerClient.GetBlobClient($"{DateTime.Now.ToString("dd.MM.yyyy-HH.mm")}_dbsnapshot.bacpac");
+            var blobClient = containerClient.GetBlobClient($"{DateTime.Now:dd.MM.yyyy-HH.mm}_dbsnapshot.bacpac");
 
             await blobClient.UploadAsync(stream, cancellationToken);
         }
         catch (Exception ex)
         {
-            logger.LogWarning($"Error occured while persisting Db data: {ex.Message}");
+            logger.LogWarning("Error occured while persisting Db data: {message}", ex.Message);
             throw;
         }
     }
+
+    private static string MakeEnvironmentFriendlyPath(string absoluteUri)
+    {
+        const string azuriteHost = "rentflex-azurite:10000";
+
+        if (!absoluteUri.Contains(azuriteHost))
+            return absoluteUri;
+
+        string replacementHost = IsRunningInKubernetes() ? "127.0.0.1:30000" : "127.0.0.1:10000";
+
+        return absoluteUri.Replace(azuriteHost, replacementHost);
+    }
+
+    private static bool IsRunningInKubernetes() =>
+        !string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("KUBERNETES_SERVICE_HOST"));
 }

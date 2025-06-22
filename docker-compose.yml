@@ -53,7 +53,7 @@ services:
     - "10000:10000"
     volumes:
     - azurite:/data
-    hostname: azurite
+    hostname: rentflex-azurite
     networks:
     - rentflex
     

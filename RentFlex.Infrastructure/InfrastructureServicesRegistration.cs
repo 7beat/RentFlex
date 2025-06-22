@@ -1,4 +1,5 @@
-﻿using Azure.Identity;
+﻿using System.Security.Claims;
+using Azure.Identity;
 using Azure.Storage.Blobs;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
@@ -17,7 +18,6 @@ using RentFlex.Infrastructure.Repositories;
 using RentFlex.Infrastructure.Services;
 using RentFlex.Utility.WireMock;
 using StackExchange.Redis;
-using System.Security.Claims;
 
 namespace RentFlex.Infrastructure;
 public static class InfrastructureServicesRegistration
@@ -53,11 +53,6 @@ public static class InfrastructureServicesRegistration
         var blobConnectionString = configuration.GetConnectionString("AzureStorage");
         services.AddSingleton(new BlobServiceClient(blobConnectionString));
 
-        services.AddHttpClient("WireMockClient", client =>
-        {
-            client.BaseAddress = new Uri("http://localhost:5000");
-        });
-
         WireMockService.Start();
         WireMockService.ConfigureEndpoints("592fdf9f-2395-4a12-8f66-1e8b3b53b6fc", "9d1063e1-125e-45c6-bef3-d5baaa717152");
     }
@@ -76,8 +71,15 @@ public static class InfrastructureServicesRegistration
 
     private static void ConfigureServices(this IServiceCollection services)
     {
-        //services.AddTransient<IAuthService, AuthService>();
-        services.AddScoped<IAirbnbService, AirbnbService>();
+        services.AddHttpClient<AirbnbApiService>(client =>
+        {
+            client.BaseAddress = new Uri("http://localhost:5000");
+        })
+        .AddStandardResilienceHandler();
+
+        services.AddScoped<IAirbnbApiService>(sp =>
+            sp.GetRequiredService<AirbnbApiService>());
+
         services.AddScoped<ICacheService, CacheService>();
         services.AddScoped<IStorageService, StorageService>();
     }
