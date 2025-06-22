@@ -53,11 +53,6 @@ public static class InfrastructureServicesRegistration
         var blobConnectionString = configuration.GetConnectionString("AzureStorage");
         services.AddSingleton(new BlobServiceClient(blobConnectionString));
 
-        services.AddHttpClient("WireMockClient", client =>
-        {
-            client.BaseAddress = new Uri("http://localhost:5000");
-        }).AddStandardResilienceHandler();
-
         WireMockService.Start();
         WireMockService.ConfigureEndpoints("592fdf9f-2395-4a12-8f66-1e8b3b53b6fc", "9d1063e1-125e-45c6-bef3-d5baaa717152");
     }
@@ -76,8 +71,15 @@ public static class InfrastructureServicesRegistration
 
     private static void ConfigureServices(this IServiceCollection services)
     {
-        //services.AddTransient<IAuthService, AuthService>();
-        services.AddScoped<IAirbnbApiService, AirbnbApiService>();
+        services.AddHttpClient<AirbnbApiService>(client =>
+        {
+            client.BaseAddress = new Uri("http://localhost:5000");
+        })
+        .AddStandardResilienceHandler();
+
+        services.AddScoped<IAirbnbApiService>(sp =>
+            sp.GetRequiredService<AirbnbApiService>());
+
         services.AddScoped<ICacheService, CacheService>();
         services.AddScoped<IStorageService, StorageService>();
     }

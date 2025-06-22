@@ -5,15 +5,16 @@ using RentFlex.Application.Models;
 using RentFlex.Domain.entities;
 
 namespace RentFlex.Infrastructure.Services;
-public class AirbnbApiService(IHttpClientFactory httpClientFactory, ILogger<AirbnbApiService> logger) : IAirbnbApiService
+public class AirbnbApiService(HttpClient httpClient, ILogger<AirbnbApiService> logger) : IAirbnbApiService
 {
-    private readonly HttpClient httpClient = httpClientFactory.CreateClient("WireMockClient");
+    private readonly HttpClient httpClient = httpClient;
     private readonly ILogger<AirbnbApiService> logger = logger;
 
     public async Task Test()
     {
         try
         {
+            logger.LogInformation("Testing ApiClient");
             var apiResponse = await httpClient.GetStringAsync("/api/hello");
         }
         catch (Exception ex)
