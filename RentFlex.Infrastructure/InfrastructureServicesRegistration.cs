@@ -71,14 +71,11 @@ public static class InfrastructureServicesRegistration
 
     private static void ConfigureServices(this IServiceCollection services)
     {
-        services.AddHttpClient<AirbnbApiService>(client =>
+        services.AddHttpClient<IAirbnbApiService, AirbnbApiService>(client =>
         {
             client.BaseAddress = new Uri("http://localhost:5000");
         })
         .AddStandardResilienceHandler();
-
-        services.AddScoped<IAirbnbApiService>(sp =>
-            sp.GetRequiredService<AirbnbApiService>());
 
         services.AddScoped<ICacheService, CacheService>();
         services.AddScoped<IStorageService, StorageService>();
