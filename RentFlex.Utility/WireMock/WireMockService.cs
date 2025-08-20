@@ -19,13 +19,17 @@ public static class WireMockService
 
         wireMockServer = WireMockServer.Start(settings);
 
-        wireMockServer.ConfigureEndpoints();
-        //wireMockServer.ConfigureAirbnbEndpoints();
+#if DEBUG
+        var authHeader = "Basic " + Convert.ToBase64String(
+            System.Text.Encoding.ASCII.GetBytes("user:password"));
+
+        wireMockServer.ConfigureTestEndpoints(authHeader);
+#endif
     }
 
-    private static void ConfigureEndpoints(this WireMockServer wireMockServer)
+    private static void ConfigureTestEndpoints(this WireMockServer wireMockServer, string authHeader)
     {
-        wireMockServer.Given(Request.Create().WithPath("/api/hello").UsingGet())
+        wireMockServer.Given(Request.Create().WithPath("/api/hello").UsingGet().WithHeader("Authorization", authHeader))
               .RespondWith(Response.Create().WithStatusCode(200).WithBody("world"));
 
         var testResponse = new TestResponse();

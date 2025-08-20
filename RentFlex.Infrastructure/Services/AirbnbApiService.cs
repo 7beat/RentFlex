@@ -1,4 +1,7 @@
-﻿using System.Net.Http.Json;
+﻿using System.Net;
+using System.Net.Http.Headers;
+using System.Net.Http.Json;
+using System.Text;
 using Microsoft.Extensions.Logging;
 using RentFlex.Application.Contracts.Infrastructure.Services;
 using RentFlex.Application.Models;
@@ -10,19 +13,22 @@ public class AirbnbApiService(HttpClient httpClient, ILogger<AirbnbApiService> l
     private readonly HttpClient httpClient = httpClient;
     private readonly ILogger<AirbnbApiService> logger = logger;
 
-    public async Task Test()
+    public async Task<string> Test()
     {
         try
         {
             logger.LogInformation("Testing ApiClient");
+            var byteArray = Encoding.ASCII.GetBytes("user:password");
+            httpClient.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue(nameof(AuthenticationSchemes.Basic), Convert.ToBase64String(byteArray));
             var apiResponse = await httpClient.GetStringAsync("/api/hello");
+            return apiResponse;
         }
         catch (Exception ex)
         {
             logger.LogInformation(ex, "Error While testing");
             throw;
         }
-
     }
 
     public async Task<IEnumerable<Estate>> GetAllEstatesAsync(Guid userReference)

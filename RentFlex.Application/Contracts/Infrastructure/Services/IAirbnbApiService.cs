@@ -4,7 +4,7 @@ using RentFlex.Domain.entities;
 namespace RentFlex.Application.Contracts.Infrastructure.Services;
 public interface IAirbnbApiService
 {
-    Task Test();
+    Task<string> Test();
     Task<IEnumerable<Estate>> GetAllEstatesAsync(Guid airbnbReference); // userReference
     Task<Guid> CreateEstateAsync(Guid userReference, EstateDto estate);
     Task<bool> UpdateEstateAsync(Guid airbnbReference, EstateDto estate);
