@@ -35,6 +35,9 @@
                                 <dd class="col-sm-8">@rental.RentType</dd>
 
                             </dl>
+                            <a asp-action="DownloadInvoice" asp-route-invoiceId="@rental.Id" class="btn btn-success">
+                                <i class="bi bi-file-earmark-pdf"></i> Download Invoice PDF
+                            </a>
                         </div>
                     </div>
                 </div>

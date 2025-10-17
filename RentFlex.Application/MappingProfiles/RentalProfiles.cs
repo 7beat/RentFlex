@@ -9,6 +9,7 @@ internal class RentalProfiles : Profile
     {
         CreateMap<Rental, RentalDto>()
             .ForMember(dest => dest.PropertyName, opt => opt.MapFrom(src => src.Estate.PropertyName))
+            .ForMember(dest => dest.CostPerDay, opt => opt.MapFrom(src => src.Estate.CostPerDay))
             .ReverseMap();
     }
 }

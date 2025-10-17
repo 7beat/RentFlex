@@ -1,5 +1,6 @@
 using CarRental.Infrastructure.Extensions;
 using RentFlex.Web.Configuration;
+using Rotativa.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,8 +30,9 @@ else
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
-app.UseRouting();
+app.UseRotativa();
 
+app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
