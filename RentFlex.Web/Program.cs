@@ -1,5 +1,6 @@
 using CarRental.Infrastructure.Extensions;
 using RentFlex.Web.Configuration;
+using RentFlex.Web.Filters;
 using Rotativa.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,6 +9,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.RegisterServices(builder.Configuration);
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
+
+builder.Services.AddScoped<CacheResourceFilter>();
 
 var app = builder.Build();
 

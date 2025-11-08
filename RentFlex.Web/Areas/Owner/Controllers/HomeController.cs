@@ -1,10 +1,11 @@
-﻿using MediatR;
+﻿using System.Diagnostics;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using RentFlex.Application.Features.Home.Queries;
+using RentFlex.Web.Filters;
 using RentFlex.Web.Models;
-using System.Diagnostics;
 
-namespace RentFlex.Web.Areas.User.Controllers;
+namespace RentFlex.Web.Areas.Owner.Controllers;
 
 [Area("Owner")]
 public class HomeController : Controller
@@ -21,17 +22,15 @@ public class HomeController : Controller
     public async Task<IActionResult> Index()
     {
         if (User.Identity!.IsAuthenticated)
-        {
-            //var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            //var estates = await _mediator.Send(new GetAllEstatesQuery(Guid.Parse(userId!)));
             return RedirectToAction(nameof(Index), "Estate");
-        }
+
 
         var applicationStats = await _mediator.Send(new GetApplicationStatsQuery());
 
         return View(applicationStats);
     }
 
+    [ServiceFilter(typeof(CacheResourceFilter))]
     public IActionResult Privacy()
     {
         return View();

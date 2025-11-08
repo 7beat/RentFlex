@@ -83,6 +83,8 @@ public static class InfrastructureServicesRegistration
 
     private static void ConfigureCache(this IServiceCollection services, IConfiguration configuration)
     {
+        services.AddMemoryCache();
+
         services.AddStackExchangeRedisCache(options =>
         {
             options.Configuration = configuration.GetConnectionString("Cache");
