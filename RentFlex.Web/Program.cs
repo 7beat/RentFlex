@@ -7,7 +7,10 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.RegisterServices(builder.Configuration);
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews(options =>
+{
+    options.Filters.Add<ExceptionFilter>();
+});
 builder.Services.AddRazorPages();
 
 builder.Services.AddScoped<CacheResourceFilter>();
